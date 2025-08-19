@@ -144,15 +144,14 @@ export default function Admin() {
 
   // Project Mutations
   const createProjectMutation = useMutation({
-    mutationFn: (data: ProjectForm) => 
-      apiRequest("/api/projects", {
-        method: "POST",
-        body: {
-          ...data,
-          technologies: data.technologies ? data.technologies.split(",").map(t => t.trim()) : [],
-          tags: data.tags ? data.tags.split(",").map(t => t.trim()).filter(t => t) : []
-        }
-      }),
+    mutationFn: async (data: ProjectForm) => {
+      const response = await apiRequest("POST", "/api/projects", {
+        ...data,
+        technologies: data.technologies ? data.technologies.split(",").map(t => t.trim()) : [],
+        tags: data.tags ? data.tags.split(",").map(t => t.trim()).filter(t => t) : []
+      });
+      return response.json();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
       setIsProjectDialogOpen(false);
@@ -172,15 +171,14 @@ export default function Admin() {
   });
 
   const updateProjectMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<ProjectForm> }) =>
-      apiRequest(`/api/projects/${id}`, {
-        method: "PUT",
-        body: {
-          ...data,
-          technologies: data.technologies ? data.technologies.split(",").map(t => t.trim()) : undefined,
-          tags: data.tags ? data.tags.split(",").map(t => t.trim()).filter(t => t) : undefined
-        }
-      }),
+    mutationFn: async ({ id, data }: { id: string; data: Partial<ProjectForm> }) => {
+      const response = await apiRequest("PUT", `/api/projects/${id}`, {
+        ...data,
+        technologies: data.technologies ? data.technologies.split(",").map(t => t.trim()) : undefined,
+        tags: data.tags ? data.tags.split(",").map(t => t.trim()).filter(t => t) : undefined
+      });
+      return response.json();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
       setIsProjectDialogOpen(false);
@@ -201,7 +199,10 @@ export default function Admin() {
   });
 
   const deleteProjectMutation = useMutation({
-    mutationFn: (id: string) => apiRequest(`/api/projects/${id}`, { method: "DELETE" }),
+    mutationFn: async (id: string) => {
+      const response = await apiRequest("DELETE", `/api/projects/${id}`);
+      return response.json();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
       toast({
@@ -220,11 +221,10 @@ export default function Admin() {
 
   // Achievement Mutations
   const createAchievementMutation = useMutation({
-    mutationFn: (data: AchievementForm) => 
-      apiRequest("/api/achievements", {
-        method: "POST",
-        body: data
-      }),
+    mutationFn: async (data: AchievementForm) => {
+      const response = await apiRequest("POST", "/api/achievements", data);
+      return response.json();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
       setIsAchievementDialogOpen(false);
@@ -244,11 +244,10 @@ export default function Admin() {
   });
 
   const updateAchievementMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<AchievementForm> }) =>
-      apiRequest(`/api/achievements/${id}`, {
-        method: "PUT",
-        body: data
-      }),
+    mutationFn: async ({ id, data }: { id: string; data: Partial<AchievementForm> }) => {
+      const response = await apiRequest("PUT", `/api/achievements/${id}`, data);
+      return response.json();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
       setIsAchievementDialogOpen(false);
@@ -269,7 +268,10 @@ export default function Admin() {
   });
 
   const deleteAchievementMutation = useMutation({
-    mutationFn: (id: string) => apiRequest(`/api/achievements/${id}`, { method: "DELETE" }),
+    mutationFn: async (id: string) => {
+      const response = await apiRequest("DELETE", `/api/achievements/${id}`);
+      return response.json();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
       toast({

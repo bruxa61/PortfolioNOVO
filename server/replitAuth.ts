@@ -137,9 +137,9 @@ export async function setupAuth(app: Express) {
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
   if (skipAuth) {
-    // In production without auth, simulate an admin user
+    // In production, still simulate basic auth but don't auto-admin
     (req as any).user = {
-      claims: { sub: "admin", email: "rafaelaolbo@gmail.com" }
+      claims: { sub: "user", email: "visitor@example.com" }
     };
     return next();
   }
@@ -174,8 +174,12 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
 
 export const isAdmin: RequestHandler = async (req, res, next) => {
   if (skipAuth) {
-    // In production without auth, allow admin access
-    return next();
+    // In production, check if it's the admin email
+    const userEmail = (req as any).user?.claims?.email;
+    if (userEmail === "rafaelaolbo@gmail.com") {
+      return next();
+    }
+    return res.status(403).json({ message: "Admin access required" });
   }
 
   const user = req.user as any;
