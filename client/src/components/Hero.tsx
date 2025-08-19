@@ -20,12 +20,17 @@ export default function Hero() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center fade-in">
           <div className="mb-8">
-            <div className="w-48 h-48 mx-auto rounded-full bg-primary-pink/20 border-4 border-primary-pink overflow-hidden">
-              <img 
-                src={heroImage} 
-                alt="Rafaela Botelho - Desenvolvedora Full Stack" 
-                className="w-full h-full object-cover" 
-              />
+            <div className="relative mx-auto w-64 h-80 mb-8">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-pink/20 to-purple-200/20 rounded-2xl blur-xl transform rotate-3"></div>
+              <div className="relative bg-white rounded-2xl p-2 shadow-2xl transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+                <img 
+                  src={heroImage} 
+                  alt="Rafaela Botelho - Desenvolvedora Full Stack" 
+                  className="w-full h-full object-cover rounded-xl shadow-lg" 
+                />
+              </div>
+              <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-primary-pink/10 rounded-full blur-md"></div>
+              <div className="absolute -top-4 -left-4 w-12 h-12 bg-purple-300/20 rounded-full blur-sm"></div>
             </div>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold text-dark-gray mb-4">
