@@ -1,6 +1,6 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { Github, Linkedin } from "lucide-react";
-import heroImage from "../assets/profile-image.png";
+import heroImage from "@assets/bottons (4)_1755629531814.png";
 
 export default function Hero() {
   useScrollAnimation();

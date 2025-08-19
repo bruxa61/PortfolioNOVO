@@ -4,10 +4,9 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
-import Certificates from "@/components/Certificates";
 import Achievements from "@/components/Achievements";
 import Contact from "@/components/Contact";
-import Admin from "@/components/Admin";
+import Admin from "@/components/AdminNew";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -21,7 +20,6 @@ export default function Home() {
       <Skills />
       <Projects />
       <Achievements />
-      <Certificates />
       <Contact />
       {isAdmin && <Admin />}
       <Footer />

@@ -7,10 +7,13 @@ export function useAuth() {
     retry: false,
   });
 
+  // Check if user is admin based on email
+  const isAdmin = user?.email === "rafaelaolbo@gmail.com";
+
   return {
     user,
     isLoading,
     isAuthenticated: !!user,
-    isAdmin: user?.isAdmin || false,
+    isAdmin,
   };
 }

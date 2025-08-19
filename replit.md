@@ -11,7 +11,10 @@ This is a portfolio website for Rafaela Botelho, a full-stack developer student.
 - Added comprehensive admin area for content management (projects, achievements)
 - Implemented visitor authentication system with likes/comments functionality
 - Added LinkedIn sharing capabilities with custom previews
-- Updated profile image to circular format with new provided image (Group 38_1755626991147.png)
+- Updated profile image to circular format with new provided image (bottons (4)_1755629531814.png)
+- Removed certificates section, keeping only achievements section
+- Implemented comprehensive admin dashboard with tabs for projects, achievements, and contacts management
+- Added complete CRUD functionality for both projects and achievements with proper form validation
 - Extended database schema with achievements, experiences, notifications tables
 - Implemented complete CRUD operations for achievements and experiences
 - Added likes/comments functionality for achievements similar to projects
