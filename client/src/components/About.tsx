@@ -12,17 +12,7 @@ export default function About() {
           <div className="w-24 h-1 bg-primary-pink mx-auto rounded-full"></div>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="fade-in">
-            <div className="rounded-2xl overflow-hidden shadow-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
-                alt="Professional workspace setup" 
-                className="w-full h-80 object-cover"
-              />
-            </div>
-          </div>
-          
+        <div className="max-w-4xl mx-auto">
           <div className="fade-in">
             <div className="space-y-6">
               <p className="text-lg text-gray-600 leading-relaxed">
@@ -34,19 +24,31 @@ export default function About() {
               <p className="text-lg text-gray-600 leading-relaxed">
                 Meu interesse se estende desde o desenvolvimento full stack até projetos mais criativos como 
                 <strong className="text-primary-pink"> pixel art games</strong> e aplicações web interativas. 
-                Acredito que a tecnologia pode ser uma ferramenta poderosa para criar experiências únicas.
+                Acredito que a tecnologia pode ser uma ferramenta poderosa para criar experiências únicas e significativas.
               </p>
               
-              <div className="grid grid-cols-2 gap-4 mt-8">
-                <div className="bg-white p-4 rounded-lg shadow-md">
-                  <GraduationCap className="text-primary-pink text-2xl mb-2" />
-                  <h4 className="font-semibold text-dark-gray">Formação</h4>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Sempre busco aprender novas tecnologias e metodologias que possam agregar valor aos projetos em que trabalho. 
+                Tenho especial interesse em interfaces intuitivas, experiência do usuário e soluções que fazem a diferença na vida das pessoas.
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-6 mt-8">
+                <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                  <GraduationCap className="text-primary-pink text-3xl mb-3 mx-auto" />
+                  <h4 className="font-semibold text-dark-gray mb-2">Formação</h4>
                   <p className="text-sm text-gray-600">ADS - Senai & FATEC</p>
                 </div>
-                <div className="bg-white p-4 rounded-lg shadow-md">
-                  <Code className="text-primary-pink text-2xl mb-2" />
-                  <h4 className="font-semibold text-dark-gray">Foco</h4>
+                <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                  <Code className="text-primary-pink text-3xl mb-3 mx-auto" />
+                  <h4 className="font-semibold text-dark-gray mb-2">Especialização</h4>
                   <p className="text-sm text-gray-600">Full Stack Development</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-primary-pink/20 rounded-full flex items-center justify-center">
+                    <span className="text-primary-pink font-bold text-lg">🎮</span>
+                  </div>
+                  <h4 className="font-semibold text-dark-gray mb-2">Interesse</h4>
+                  <p className="text-sm text-gray-600">Pixel Art Games</p>
                 </div>
               </div>
             </div>

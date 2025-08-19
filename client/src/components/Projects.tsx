@@ -1,14 +1,82 @@
+import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { useQuery } from "@tanstack/react-query";
-import { Github, ExternalLink, Loader2 } from "lucide-react";
-import type { Project } from "@shared/schema";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { Github, ExternalLink, Loader2, Heart, MessageCircle, Eye } from "lucide-react";
+import ProjectModal from "@/components/ProjectModal";
+import type { ProjectWithStats } from "@shared/schema";
+import { isUnauthorizedError } from "@/lib/authUtils";
 
 export default function Projects() {
   useScrollAnimation();
+  const { isAuthenticated } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  
+  const [selectedProject, setSelectedProject] = useState<ProjectWithStats | null>(null);
+  const [likedProjects, setLikedProjects] = useState<Set<string>>(new Set());
 
-  const { data: projects, isLoading, error } = useQuery<Project[]>({
+  const { data: projects, isLoading, error } = useQuery<ProjectWithStats[]>({
     queryKey: ["/api/projects"],
   });
+
+  const toggleLikeMutation = useMutation({
+    mutationFn: async (projectId: string) => {
+      const response = await apiRequest("POST", `/api/projects/${projectId}/like`);
+      return response.json();
+    },
+    onSuccess: (data, projectId) => {
+      if (data.liked) {
+        setLikedProjects(prev => new Set(Array.from(prev).concat(projectId)));
+      } else {
+        setLikedProjects(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(projectId);
+          return newSet;
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
+      toast({
+        title: data.liked ? "Projeto curtido!" : "Curtida removida",
+        description: data.liked ? "Você curtiu este projeto." : "Você removeu a curtida.",
+      });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Login necessário",
+          description: "Faça login para curtir os projetos.",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 1500);
+        return;
+      }
+      toast({
+        title: "Erro ao curtir",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleToggleLike = (projectId: string) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Login necessário",
+        description: "Faça login para curtir os projetos.",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 1500);
+      return;
+    }
+    toggleLikeMutation.mutate(projectId);
+  };
 
   if (error) {
     return (
@@ -39,60 +107,130 @@ export default function Projects() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects?.map((project, index) => (
+            {projects?.map((project) => (
               <div key={project.id} className="gradient-border fade-in group">
-                <div className="p-6 h-full">
+                <div className="p-6 h-full flex flex-col">
                   <div className="relative overflow-hidden rounded-lg mb-4">
                     <img 
                       src={project.image} 
                       alt={`${project.title} project`} 
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                      onClick={() => setSelectedProject(project)}
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <div className="space-x-4">
+                        <button
+                          onClick={() => setSelectedProject(project)}
+                          className="bg-white text-dark-gray px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
+                        >
+                          <Eye size={16} />
+                          Ver Detalhes
+                        </button>
                         {project.githubUrl && (
                           <a
                             href={project.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-white text-dark-gray px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
+                            className="bg-dark-gray text-white px-4 py-2 rounded-full font-semibold hover:bg-gray-800 transition-colors inline-flex items-center gap-2"
+                            onClick={(e) => e.stopPropagation()}
                           >
                             <Github size={16} />
                             GitHub
                           </a>
                         )}
-                        {project.demoUrl && (
-                          <a
-                            href={project.demoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-primary-pink text-white px-4 py-2 rounded-full font-semibold hover:bg-pink-500 transition-colors inline-flex items-center gap-2"
-                          >
-                            <ExternalLink size={16} />
-                            Demo
-                          </a>
-                        )}
                       </div>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-dark-gray mb-2">{project.title}</h3>
-                  <p className="text-gray-600 mb-4 text-sm leading-relaxed">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech, techIndex) => (
-                      <span
-                        key={techIndex}
-                        className="bg-soft-pink text-primary-pink px-3 py-1 rounded-full text-xs font-semibold"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                  
+                  <div className="flex-1 flex flex-col">
+                    <h3 
+                      className="text-xl font-bold text-dark-gray mb-2 cursor-pointer hover:text-primary-pink transition-colors"
+                      onClick={() => setSelectedProject(project)}
+                    >
+                      {project.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4 text-sm leading-relaxed flex-1">
+                      {project.description.length > 120 
+                        ? `${project.description.substring(0, 120)}...` 
+                        : project.description
+                      }
+                    </p>
+                    
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.slice(0, 3).map((tech, techIndex) => (
+                          <span
+                            key={techIndex}
+                            className="bg-soft-pink text-primary-pink px-3 py-1 rounded-full text-xs font-semibold"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                        {project.technologies.length > 3 && (
+                          <span className="text-xs text-gray-500 px-2 py-1">
+                            +{project.technologies.length - 3} mais
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Stats and Actions */}
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                        <div className="flex items-center space-x-4 text-sm text-gray-500">
+                          <span className="flex items-center space-x-1">
+                            <Heart size={14} />
+                            <span>{project.likesCount || 0}</span>
+                          </span>
+                          <span className="flex items-center space-x-1">
+                            <MessageCircle size={14} />
+                            <span>{project.commentsCount || 0}</span>
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleLike(project.id);
+                            }}
+                            className={`p-2 rounded-full transition-colors ${
+                              likedProjects.has(project.id) || project.userLiked
+                                ? "bg-red-100 text-red-600 hover:bg-red-200"
+                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            }`}
+                            title="Curtir projeto"
+                          >
+                            <Heart 
+                              size={16} 
+                              className={(likedProjects.has(project.id) || project.userLiked) ? "fill-current" : ""} 
+                            />
+                          </button>
+                          
+                          <button
+                            onClick={() => setSelectedProject(project)}
+                            className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                            title="Ver comentários"
+                          >
+                            <MessageCircle size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+        )}
+        
+        {/* Project Modal */}
+        {selectedProject && (
+          <ProjectModal
+            project={selectedProject}
+            isOpen={!!selectedProject}
+            onClose={() => setSelectedProject(null)}
+            liked={likedProjects.has(selectedProject.id) || selectedProject.userLiked || false}
+            onToggleLike={() => handleToggleLike(selectedProject.id)}
+          />
         )}
         
         <div className="text-center mt-12 fade-in">
