@@ -1,0 +1,31 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "title": "E-commerce Platform",
+      "description": "Plataforma completa de e-commerce desenvolvida com React e Node.js, incluindo carrinho de compras, pagamentos e painel administrativo.",
+      "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+      "githubUrl": "https://github.com/bruxa61/ecommerce-platform",
+      "demoUrl": "https://ecommerce-demo.example.com",
+      "technologies": ["React", "Node.js", "MongoDB"]
+    },
+    {
+      "id": "2",
+      "title": "Pixel Art Adventure",
+      "description": "Jogo de aventura em pixel art desenvolvido com HTML5 Canvas e JavaScript, featuring physics engine e sistema de levels.",
+      "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+      "githubUrl": "https://github.com/bruxa61/pixel-adventure",
+      "demoUrl": "https://pixel-game.example.com",
+      "technologies": ["JavaScript", "Canvas", "Game Dev"]
+    },
+    {
+      "id": "3",
+      "title": "TaskFlow Manager",
+      "description": "Aplicativo de gerenciamento de tarefas com interface intuitiva, drag & drop, notificações e sincronização em tempo real.",
+      "image": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+      "githubUrl": "https://github.com/bruxa61/taskflow-manager",
+      "demoUrl": "https://taskflow.example.com",
+      "technologies": ["Vue.js", "Firebase", "PWA"]
+    }
+  ]
+}
