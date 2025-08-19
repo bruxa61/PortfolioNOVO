@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, LogIn, LogOut, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import avatarImage from "@assets/bottons (4)_1755629531814.png";
+import avatarImage from "@assets/bottons (3)_1755631449256.png";
 
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
