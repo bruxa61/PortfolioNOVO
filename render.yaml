@@ -10,3 +10,5 @@ services:
         value: production
       - key: PORT
         value: 10000
+    # IMPORTANTE: NÃO configure REPLIT_DOMAINS
+    # A aplicação detecta automaticamente e funciona sem autenticação
