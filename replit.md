@@ -2,6 +2,13 @@
 
 This is a portfolio website for Rafaela Botelho, a full-stack developer student. The application showcases her projects, skills, and provides a contact form for potential collaborators or employers. The site is built as a single-page application with modern React components and a clean, responsive design featuring a pink accent theme.
 
+## Recent Changes (Aug 19, 2025)
+- Successfully migrated from Replit Agent to standard Replit environment
+- Updated database configuration from Neon serverless to PostgreSQL
+- Fixed Node.js module imports for pg driver compatibility
+- Added SESSION_SECRET environment variable for secure session management
+- All database schemas pushed and application running successfully on port 5000
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
