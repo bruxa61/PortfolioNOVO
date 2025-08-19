@@ -1,6 +1,6 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { Github, Linkedin } from "lucide-react";
-import avatarImage from "@assets/bottons (3)_1755623044380.png";
+import heroImage from "@assets/Group 37 (2)_1755624497433.png";
 
 export default function Hero() {
   useScrollAnimation();
@@ -20,10 +20,10 @@ export default function Hero() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center fade-in">
           <div className="mb-8">
-            <div className="w-32 h-32 mx-auto rounded-full bg-primary-pink/20 border-4 border-primary-pink overflow-hidden">
+            <div className="w-48 h-48 mx-auto rounded-full bg-primary-pink/20 border-4 border-primary-pink overflow-hidden">
               <img 
-                src={avatarImage} 
-                alt="Rafaela Botelho - Pixel art avatar" 
+                src={heroImage} 
+                alt="Rafaela Botelho - Desenvolvedora Full Stack" 
                 className="w-full h-full object-cover" 
               />
             </div>

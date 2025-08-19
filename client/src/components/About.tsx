@@ -1,5 +1,5 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { GraduationCap, Code } from "lucide-react";
+import { GraduationCap, Code, Download } from "lucide-react";
 
 export default function About() {
   useScrollAnimation();
@@ -16,39 +16,35 @@ export default function About() {
           <div className="fade-in">
             <div className="space-y-6">
               <p className="text-lg text-gray-600 leading-relaxed">
-                Minha jornada na programação começou com a curiosidade de entender como as coisas funcionam por trás das telas. 
-                Atualmente estou cursando <strong className="text-primary-pink">Análise e Desenvolvimento de Sistemas</strong> 
-                no Senai e FATEC, onde tenho a oportunidade de aprofundar meus conhecimentos técnicos.
+                Apaixonada por tecnologia e formada em Análise e Desenvolvimento de Sistemas pelo SENAI "Morvan Figueiredo", busco constantemente aprimorar minhas habilidades na área. Meu portfólio demonstra como realizo a união entre a lógica da programação com a criatividade do design, resultando em projetos visualmente atraentes e com foco em conversão. Tenho um forte interesse por front-end e design, o que me permite criar peças eficazes e com ótima experiência para o usuário.
               </p>
               
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Meu interesse se estende desde o desenvolvimento full stack até projetos mais criativos como 
-                <strong className="text-primary-pink"> pixel art games</strong> e aplicações web interativas. 
-                Acredito que a tecnologia pode ser uma ferramenta poderosa para criar experiências únicas e significativas.
-              </p>
+              {/* CV Button */}
+              <div className="text-center mb-8">
+                <a
+                  href="https://drive.google.com/drive/folders/1ILBWKdl1zsjZ0jmk7LkG6MFQXvip7ns4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 bg-primary-pink text-white px-6 py-3 rounded-full font-semibold hover:bg-pink-500 transition-colors"
+                >
+                  <Download size={20} />
+                  <span>Acessar Currículo Virtual</span>
+                </a>
+              </div>
               
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Sempre busco aprender novas tecnologias e metodologias que possam agregar valor aos projetos em que trabalho. 
-                Tenho especial interesse em interfaces intuitivas, experiência do usuário e soluções que fazem a diferença na vida das pessoas.
-              </p>
-              
-              <div className="grid md:grid-cols-3 gap-6 mt-8">
+              <div className="grid md:grid-cols-2 gap-6 mt-8">
                 <div className="bg-white p-6 rounded-lg shadow-md text-center">
                   <GraduationCap className="text-primary-pink text-3xl mb-3 mx-auto" />
                   <h4 className="font-semibold text-dark-gray mb-2">Formação</h4>
-                  <p className="text-sm text-gray-600">ADS - Senai & FATEC</p>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p><strong>Desenvolvimento de Sistemas (Curso Técnico)</strong><br/>SENAI</p>
+                    <p><strong>Desenvolvimento de Software (Superior)</strong><br/>FATEC</p>
+                  </div>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md text-center">
                   <Code className="text-primary-pink text-3xl mb-3 mx-auto" />
                   <h4 className="font-semibold text-dark-gray mb-2">Especialização</h4>
-                  <p className="text-sm text-gray-600">Full Stack Development</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                  <div className="w-12 h-12 mx-auto mb-3 bg-primary-pink/20 rounded-full flex items-center justify-center">
-                    <span className="text-primary-pink font-bold text-lg">🎮</span>
-                  </div>
-                  <h4 className="font-semibold text-dark-gray mb-2">Interesse</h4>
-                  <p className="text-sm text-gray-600">Pixel Art Games</p>
+                  <p className="text-sm text-gray-600">Front-End & Design<br/>Full Stack Development</p>
                 </div>
               </div>
             </div>

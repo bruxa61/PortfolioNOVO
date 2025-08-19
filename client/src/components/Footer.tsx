@@ -27,7 +27,7 @@ export default function Footer() {
           </div>
           <div className="border-t border-gray-700 pt-8">
             <p className="text-gray-400 text-sm flex items-center justify-center gap-2">
-              © 2024 Rafaela Botelho. Feito com 
+              © 2025 Rafaela Botelho. Feito com 
               <Heart className="text-red-500" size={16} fill="currentColor" /> 
               e muito 
               <Coffee className="text-yellow-600" size={16} />
