@@ -16,7 +16,7 @@ export default function About() {
           <div className="fade-in">
             <div className="space-y-6">
               <p className="text-lg text-gray-600 leading-relaxed">
-                <strong className="text-primary-pink">Apaixonada por tecnologia</strong> e formada em Análise e Desenvolvimento de Sistemas pelo SENAI "Morvan Figueiredo", atualmente cursando <strong className="text-primary-pink">Desenvolvimento de Software Multiplataforma na FATEC</strong>, busco constantemente aprimorar minhas habilidades na área. Meu portfólio demonstra como realizo a <strong className="text-primary-pink">união entre a lógica da programação com a criatividade do design</strong>, resultando em projetos visualmente atraentes e com <strong className="text-primary-pink">foco em conversão</strong>. Tenho um <strong className="text-primary-pink">forte interesse por front-end e design</strong>, o que me permite criar peças eficazes e com <strong className="text-primary-pink">ótima experiência para o usuário</strong>.
+                Apaixonada por tecnologia e formada em Análise e Desenvolvimento de Sistemas pelo SENAI "Morvan Figueiredo", atualmente cursando <strong className="text-primary-pink">Desenvolvimento de Software Multiplataforma na FATEC</strong>, busco constantemente aprimorar minhas habilidades na área. Meu portfólio demonstra como realizo a união entre a lógica da programação com a criatividade do design, resultando em projetos visualmente atraentes e com foco em conversão. Tenho um <strong className="text-primary-pink">forte interesse por front-end e design</strong>, o que me permite criar peças eficazes e com ótima experiência para o usuário.
               </p>
               
               {/* CV Button */}
