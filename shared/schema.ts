@@ -37,6 +37,40 @@ export const projects = pgTable("projects", {
   githubUrl: text("github_url"),
   demoUrl: text("demo_url"),
   technologies: json("technologies").$type<string[]>().notNull(),
+  category: varchar("category").notNull().default("web"),
+  tags: json("tags").$type<string[]>().default([]),
+  status: varchar("status").notNull().default("published"), // published, draft
+  featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const achievements = pgTable("achievements", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  image: text("image"),
+  date: timestamp("date").notNull(),
+  category: varchar("category").notNull().default("certification"),
+  certificateUrl: text("certificate_url"),
+  organization: text("organization"),
+  status: varchar("status").notNull().default("published"), // published, draft
+  featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const experiences = pgTable("experiences", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  company: text("company").notNull(),
+  description: text("description").notNull(),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  location: text("location"),
+  technologies: json("technologies").$type<string[]>().default([]),
+  current: boolean("current").default(false),
+  status: varchar("status").notNull().default("published"), // published, draft
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -56,6 +90,33 @@ export const projectComments = pgTable("project_comments", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const achievementLikes = pgTable("achievement_likes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  achievementId: varchar("achievement_id").notNull().references(() => achievements.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const achievementComments = pgTable("achievement_comments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  achievementId: varchar("achievement_id").notNull().references(() => achievements.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const notifications = pgTable("notifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  type: varchar("type").notNull(), // comment, like
+  entityType: varchar("entity_type").notNull(), // project, achievement
+  entityId: varchar("entity_id").notNull(),
+  fromUserId: varchar("from_user_id").references(() => users.id, { onDelete: "cascade" }),
+  message: text("message").notNull(),
+  read: boolean("read").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const contacts = pgTable("contacts", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
@@ -69,11 +130,19 @@ export const contacts = pgTable("contacts", {
 export const usersRelations = relations(users, ({ many }) => ({
   projectLikes: many(projectLikes),
   projectComments: many(projectComments),
+  achievementLikes: many(achievementLikes),
+  achievementComments: many(achievementComments),
+  notifications: many(notifications),
 }));
 
 export const projectsRelations = relations(projects, ({ many }) => ({
   likes: many(projectLikes),
   comments: many(projectComments),
+}));
+
+export const achievementsRelations = relations(achievements, ({ many }) => ({
+  likes: many(achievementLikes),
+  comments: many(achievementComments),
 }));
 
 export const projectLikesRelations = relations(projectLikes, ({ one }) => ({
@@ -98,7 +167,52 @@ export const projectCommentsRelations = relations(projectComments, ({ one }) => 
   }),
 }));
 
+export const achievementLikesRelations = relations(achievementLikes, ({ one }) => ({
+  achievement: one(achievements, {
+    fields: [achievementLikes.achievementId],
+    references: [achievements.id],
+  }),
+  user: one(users, {
+    fields: [achievementLikes.userId],
+    references: [users.id],
+  }),
+}));
+
+export const achievementCommentsRelations = relations(achievementComments, ({ one }) => ({
+  achievement: one(achievements, {
+    fields: [achievementComments.achievementId],
+    references: [achievements.id],
+  }),
+  user: one(users, {
+    fields: [achievementComments.userId],
+    references: [users.id],
+  }),
+}));
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+  fromUser: one(users, {
+    fields: [notifications.fromUserId],
+    references: [users.id],
+  }),
+}));
+
 export const insertProjectSchema = createInsertSchema(projects).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAchievementSchema = createInsertSchema(achievements).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertExperienceSchema = createInsertSchema(experiences).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -119,16 +233,35 @@ export const insertProjectCommentSchema = createInsertSchema(projectComments).om
   createdAt: true,
 });
 
+export const insertAchievementLikeSchema = createInsertSchema(achievementLikes).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertAchievementCommentSchema = createInsertSchema(achievementComments).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type InsertProject = z.infer<typeof insertProjectSchema>;
 export type Project = typeof projects.$inferSelect;
+export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
+export type Achievement = typeof achievements.$inferSelect;
+export type InsertExperience = z.infer<typeof insertExperienceSchema>;
+export type Experience = typeof experiences.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
 export type Contact = typeof contacts.$inferSelect;
 export type InsertProjectLike = z.infer<typeof insertProjectLikeSchema>;
 export type ProjectLike = typeof projectLikes.$inferSelect;
 export type InsertProjectComment = z.infer<typeof insertProjectCommentSchema>;
 export type ProjectComment = typeof projectComments.$inferSelect;
+export type InsertAchievementLike = z.infer<typeof insertAchievementLikeSchema>;
+export type AchievementLike = typeof achievementLikes.$inferSelect;
+export type InsertAchievementComment = z.infer<typeof insertAchievementCommentSchema>;
+export type AchievementComment = typeof achievementComments.$inferSelect;
+export type Notification = typeof notifications.$inferSelect;
 
 export type ProjectWithStats = Project & {
   likesCount: number;
@@ -136,6 +269,16 @@ export type ProjectWithStats = Project & {
   userLiked?: boolean;
 };
 
+export type AchievementWithStats = Achievement & {
+  likesCount: number;
+  commentsCount: number;
+  userLiked?: boolean;
+};
+
 export type CommentWithUser = ProjectComment & {
+  user: User;
+};
+
+export type AchievementCommentWithUser = AchievementComment & {
   user: User;
 };

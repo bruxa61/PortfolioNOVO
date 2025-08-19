@@ -1,6 +1,6 @@
 # Overview
 
-This is a portfolio website for Rafaela Botelho, a full-stack developer student. The application showcases her projects, skills, and provides a contact form for potential collaborators or employers. The site is built as a single-page application with modern React components and a clean, responsive design featuring a pink accent theme.
+This is a portfolio website for Rafaela Botelho, a full-stack developer student. The application showcases her projects, skills, achievements, and provides a contact form for potential collaborators or employers. The site includes an administrative area for content management, visitor authentication for interactions (likes, comments), and LinkedIn sharing capabilities. The site is built as a single-page application with modern React components and a clean, responsive design featuring a pink accent theme.
 
 ## Recent Changes (Aug 19, 2025)
 - Successfully migrated from Replit Agent to standard Replit environment
@@ -8,6 +8,15 @@ This is a portfolio website for Rafaela Botelho, a full-stack developer student.
 - Fixed Node.js module imports for pg driver compatibility
 - Added SESSION_SECRET environment variable for secure session management
 - All database schemas pushed and application running successfully on port 5000
+- Added comprehensive admin area for content management (projects, achievements)
+- Implemented visitor authentication system with likes/comments functionality
+- Added LinkedIn sharing capabilities with custom previews
+- Updated profile image to circular format with new provided image (Group 38_1755626991147.png)
+- Extended database schema with achievements, experiences, notifications tables
+- Implemented complete CRUD operations for achievements and experiences
+- Added likes/comments functionality for achievements similar to projects
+- Created API routes for all new content management features
+- Storage layer now supports both DatabaseStorage and MemStorage for all entities
 
 # User Preferences
 
@@ -27,17 +36,19 @@ Preferred communication style: Simple, everyday language.
 ## Backend Architecture
 - **Runtime**: Node.js with Express.js server
 - **Language**: TypeScript with ES modules
-- **API Design**: RESTful endpoints for projects and contact form submission
-- **Data Storage**: In-memory storage with file-based project data (JSON)
+- **API Design**: RESTful endpoints for projects, achievements, experiences, and contact form
+- **Authentication**: Replit OAuth integration with admin role management
+- **Data Storage**: PostgreSQL database with Drizzle ORM, fallback to in-memory storage
 - **Schema Validation**: Zod schemas for type-safe data validation
 - **Development**: Hot module replacement with Vite integration
 
 ## Data Storage Solutions
-- **Primary Storage**: MemStorage class for in-memory data management
-- **Project Data**: Static JSON file (`server/data/projects.json`)
-- **Contact Storage**: In-memory Map structure with UUID-based IDs
-- **Database Schema**: Drizzle ORM schemas defined for future PostgreSQL integration
-- **File Structure**: Shared schema definitions between client and server
+- **Primary Storage**: DatabaseStorage class using PostgreSQL with Drizzle ORM
+- **Fallback Storage**: MemStorage class for in-memory data management when DATABASE_URL unavailable
+- **Database Tables**: projects, achievements, experiences, users, likes, comments, notifications, sessions
+- **Authentication**: Session-based authentication with PostgreSQL session store
+- **Admin Management**: Email-based admin role assignment (rafaelaolbo@gmail.com)
+- **File Structure**: Shared schema definitions between client and server with full type safety
 
 ## Design Patterns
 - **Monorepo Structure**: Organized into `client/`, `server/`, and `shared/` directories

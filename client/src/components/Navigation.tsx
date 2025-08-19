@@ -39,6 +39,7 @@ export default function Navigation() {
     { id: "inicio", label: "Início" },
     { id: "sobre", label: "Sobre" },
     { id: "projetos", label: "Projetos" },
+    { id: "achievements", label: "Conquistas" },
     { id: "certificados", label: "Certificados" },
     { id: "contato", label: "Contato" },
   ];
