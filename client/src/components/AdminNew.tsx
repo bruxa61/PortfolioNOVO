@@ -498,12 +498,12 @@ export default function Admin() {
                         Novo Projeto
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                    <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto" aria-describedby="project-dialog-description">
                       <DialogHeader>
                         <DialogTitle>
                           {editingProject ? "Editar Projeto" : "Novo Projeto"}
                         </DialogTitle>
-                        <DialogDescription>
+                        <DialogDescription id="project-dialog-description">
                           {editingProject ? "Edite os detalhes do projeto" : "Adicione um novo projeto ao seu portfólio"}
                         </DialogDescription>
                       </DialogHeader>
@@ -736,12 +736,12 @@ export default function Admin() {
                         Nova Conquista
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                    <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto" aria-describedby="achievement-dialog-description">
                       <DialogHeader>
                         <DialogTitle>
                           {editingAchievement ? "Editar Conquista" : "Nova Conquista"}
                         </DialogTitle>
-                        <DialogDescription>
+                        <DialogDescription id="achievement-dialog-description">
                           {editingAchievement ? "Edite os detalhes da conquista" : "Adicione uma nova conquista ao seu portfólio"}
                         </DialogDescription>
                       </DialogHeader>

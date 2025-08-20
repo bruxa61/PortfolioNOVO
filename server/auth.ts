@@ -196,7 +196,7 @@ export function setupAuth(app: Express) {
   });
 
   // Update user profile
-  app.put("/api/user/profile", (req: any, res) => {
+  app.put("/api/user/profile", async (req: any, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "Não autenticado" });
     }
@@ -205,10 +205,24 @@ export function setupAuth(app: Express) {
       const { profileImageUrl } = req.body;
       const userId = req.user.id;
       
-      // For in-memory storage, we'll just update the user session
-      if (req.user) {
+      // Update user in storage
+      try {
+        await storage.updateUser(userId, { profileImageUrl });
+      } catch (storageError) {
+        // If storage fails, update session directly for in-memory fallback
+        console.log("Storage update failed, updating session:", storageError);
+      }
+      
+      // Update the current session
+      if (req.user && typeof req.user === 'object') {
         req.user.profileImageUrl = profileImageUrl;
-        req.session.passport.user.profileImageUrl = profileImageUrl;
+        
+        // Update session data if it exists
+        if (req.session && req.session.passport && req.session.passport.user) {
+          if (typeof req.session.passport.user === 'object') {
+            req.session.passport.user.profileImageUrl = profileImageUrl;
+          }
+        }
       }
       
       const { password: _, ...userWithoutPassword } = req.user as User;

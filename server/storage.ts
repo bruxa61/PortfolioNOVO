@@ -9,6 +9,7 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
+  updateUser(id: string, userData: Partial<User>): Promise<User>;
   getProjects(): Promise<ProjectWithStats[]>;
   getProject(id: string): Promise<Project | undefined>;
   createProject(project: InsertProject): Promise<Project>;
@@ -118,6 +119,41 @@ export class DatabaseStorage implements IStorage {
       return user;
     } catch (error) {
       console.error("Database error in upsertUser:", error);
+      throw error;
+    }
+  }
+
+  async updateUser(id: string, userData: Partial<User>): Promise<User> {
+    if (!db) {
+      // For in-memory fallback, just return a basic user object
+      return {
+        id,
+        email: userData.email || '',
+        password: null,
+        firstName: userData.firstName || null,
+        lastName: userData.lastName || null,
+        profileImageUrl: userData.profileImageUrl || null,
+        isAdmin: userData.isAdmin || false,
+        provider: 'local',
+        providerId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    }
+
+    try {
+      const [updatedUser] = await db
+        .update(users)
+        .set({
+          ...userData,
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, id))
+        .returning();
+      
+      return updatedUser;
+    } catch (error) {
+      console.error("Database error in updateUser:", error);
       throw error;
     }
   }
@@ -549,6 +585,23 @@ export class MemStorage implements IStorage {
     };
     this.users.set(user.id, user);
     return user;
+  }
+
+  async updateUser(id: string, userData: Partial<User>): Promise<User> {
+    const existingUser = this.users.get(id);
+    if (!existingUser) {
+      throw new Error('User not found');
+    }
+    
+    const updatedUser: User = {
+      ...existingUser,
+      ...userData,
+      id, // Ensure ID doesn't change
+      updatedAt: new Date(),
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
   }
 
   async getProjects(): Promise<ProjectWithStats[]> {
