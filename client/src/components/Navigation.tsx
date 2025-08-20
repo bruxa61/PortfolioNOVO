@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
-import { Menu, X, LogIn, LogOut, Settings } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { Menu, X, LogOut, Settings, User, LogIn } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import avatarImage from "@assets/bottons (3)_1755631449256.png";
 
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("inicio");
-  const { user, isAuthenticated, isAdmin } = useAuth();
+  const { user, logoutMutation } = useAuth();
+  const isAuthenticated = !!user;
+  const isAdmin = user?.isAdmin || false;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,45 +85,62 @@ export default function Navigation() {
                 </button>
               ))}
               
-              {/* Auth buttons */}
+              {/* User Menu */}
               <div className="flex items-center space-x-4 ml-8 pl-8 border-l border-gray-200">
-                {isAuthenticated ? (
-                  <div className="flex items-center space-x-3">
-                    {user?.profileImageUrl && (
-                      <img 
-                        src={user.profileImageUrl} 
-                        alt={user.firstName || 'User'} 
-                        className="w-8 h-8 rounded-full border border-primary-pink"
-                      />
-                    )}
-                    <span className="text-sm text-gray-600">
-                      {user?.firstName || user?.email}
-                    </span>
-                    {isAdmin && (
-                      <button
-                        onClick={() => scrollToSection("admin")}
-                        className="text-primary-pink hover:text-pink-600 transition-colors"
-                        title="Admin Panel"
+                {isAuthenticated && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="flex items-center space-x-2 p-2 h-auto">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center">
+                          {user.profileImageUrl ? (
+                            <img 
+                              src={user.profileImageUrl} 
+                              alt={user.firstName || 'User'} 
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <User className="h-4 w-4 text-white" />
+                          )}
+                        </div>
+                        <span className="text-sm font-medium text-gray-700">
+                          {user.firstName || user.email}
+                        </span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <div className="flex items-center space-x-2 p-2">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center">
+                          {user.profileImageUrl ? (
+                            <img 
+                              src={user.profileImageUrl} 
+                              alt={user.firstName || 'User'} 
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <User className="h-4 w-4 text-white" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{user.firstName} {user.lastName}</p>
+                          <p className="text-xs text-gray-500">{user.email}</p>
+                        </div>
+                      </div>
+                      <DropdownMenuSeparator />
+                      {isAdmin && (
+                        <DropdownMenuItem onClick={() => scrollToSection("admin")}>
+                          <Settings className="mr-2 h-4 w-4" />
+                          <span>Admin Panel</span>
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuItem 
+                        onClick={() => logoutMutation.mutate()}
+                        disabled={logoutMutation.isPending}
                       >
-                        <Settings size={20} />
-                      </button>
-                    )}
-                    <a
-                      href="/api/logout"
-                      className="text-gray-500 hover:text-primary-pink transition-colors"
-                      title="Logout"
-                    >
-                      <LogOut size={20} />
-                    </a>
-                  </div>
-                ) : (
-                  <a
-                    href="/api/login"
-                    className="flex items-center space-x-2 bg-primary-pink text-white px-4 py-2 rounded-full font-semibold hover:bg-pink-500 transition-colors text-sm"
-                  >
-                    <LogIn size={16} />
-                    <span>Entrar</span>
-                  </a>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>{logoutMutation.isPending ? 'Saindo...' : 'Sair'}</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
               </div>
             </div>

@@ -6,6 +6,8 @@ import { randomUUID } from "crypto";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  createUser(user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   getProjects(): Promise<ProjectWithStats[]>;
   getProject(id: string): Promise<Project | undefined>;
@@ -41,6 +43,51 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error("Database error in getUser:", error);
       return undefined;
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    if (!db) return undefined;
+    try {
+      const [user] = await db.select().from(users).where(eq(users.email, email));
+      return user;
+    } catch (error) {
+      console.error("Database error in getUserByEmail:", error);
+      return undefined;
+    }
+  }
+
+  async createUser(userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+    if (!db) {
+      return {
+        id: randomUUID(),
+        email: userData.email,
+        password: userData.password || null,
+        firstName: userData.firstName || null,
+        lastName: userData.lastName || null,
+        profileImageUrl: userData.profileImageUrl || null,
+        isAdmin: userData.isAdmin || false,
+        provider: userData.provider || 'local',
+        providerId: userData.providerId || null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    }
+    
+    try {
+      const [user] = await db
+        .insert(users)
+        .values({
+          ...userData,
+          id: randomUUID(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
+      return user;
+    } catch (error) {
+      console.error("Database error in createUser:", error);
+      throw error;
     }
   }
 
@@ -459,14 +506,44 @@ export class MemStorage implements IStorage {
     return this.users.get(id);
   }
 
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    for (const user of this.users.values()) {
+      if (user.email === email) {
+        return user;
+      }
+    }
+    return undefined;
+  }
+
+  async createUser(userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+    const user: User = {
+      id: randomUUID(),
+      email: userData.email,
+      password: userData.password || null,
+      firstName: userData.firstName || null,
+      lastName: userData.lastName || null,
+      profileImageUrl: userData.profileImageUrl || null,
+      isAdmin: userData.isAdmin || false,
+      provider: userData.provider || 'local',
+      providerId: userData.providerId || null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.users.set(user.id, user);
+    return user;
+  }
+
   async upsertUser(userData: UpsertUser): Promise<User> {
     const user: User = {
       id: userData.id || randomUUID(),
       email: userData.email || null,
+      password: userData.password || null,
       firstName: userData.firstName || null,
       lastName: userData.lastName || null,
       profileImageUrl: userData.profileImageUrl || null,
       isAdmin: userData.email === "rafaelaolbo@gmail.com",
+      provider: userData.provider || 'local',
+      providerId: userData.providerId || null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

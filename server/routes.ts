@@ -3,34 +3,25 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSchema, insertProjectSchema, insertProjectCommentSchema, insertAchievementSchema, insertAchievementCommentSchema, insertExperienceSchema } from "@shared/schema";
 import { z } from "zod";
-import { setupAuth, isAuthenticated, isAdmin } from "./replitAuth";
+import { setupAuth } from "./auth";
+
+function isAuthenticated(req: any, res: any, next: any) {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Não autenticado" });
+  }
+  next();
+}
+
+function isAdmin(req: any, res: any, next: any) {
+  if (!req.user?.isAdmin) {
+    return res.status(403).json({ message: "Acesso negado" });
+  }
+  next();
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
-
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      let user = await storage.getUser(userId);
-      
-      // If no user exists, create one (for production fallback)
-      if (!user && userId) {
-        user = await storage.upsertUser({
-          id: userId,
-          email: req.user.claims.email || "rafaelaolbo@gmail.com",
-          firstName: "Rafaela",
-          lastName: "Botelho"
-        });
-      }
-      
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
+  // Setup authentication
+  setupAuth(app);
 
   // Get all projects
   app.get("/api/projects", async (req, res) => {
