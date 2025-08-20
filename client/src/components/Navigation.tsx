@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "wouter";
 import avatarImage from "@assets/bottons (3)_1755631449256.png";
 
 export default function Navigation() {
@@ -87,7 +88,18 @@ export default function Navigation() {
               
               {/* User Menu */}
               <div className="flex items-center space-x-4 ml-8 pl-8 border-l border-gray-200">
-                {isAuthenticated && (
+                {!isAuthenticated ? (
+                  <Link href="/auth">
+                    <Button 
+                      variant="outline" 
+                      className="border-pink-500 text-pink-600 hover:bg-pink-50"
+                      data-testid="button-login"
+                    >
+                      <User className="mr-2 h-4 w-4" />
+                      Entrar
+                    </Button>
+                  </Link>
+                ) : (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="flex items-center space-x-2 p-2 h-auto">
@@ -206,13 +218,12 @@ export default function Navigation() {
                   </a>
                 </div>
               ) : (
-                <a
-                  href="/api/login"
-                  className="flex items-center px-3 py-2 bg-primary-pink text-white rounded-md font-semibold hover:bg-pink-500 transition-colors mx-3"
-                >
-                  <LogIn size={16} className="mr-2" />
-                  Entrar
-                </a>
+                <Link href="/auth">
+                  <Button className="flex items-center w-full mx-3 bg-primary-pink text-white hover:bg-pink-500">
+                    <User className="mr-2 h-4 w-4" />
+                    Entrar
+                  </Button>
+                </Link>
               )}
             </div>
           </div>

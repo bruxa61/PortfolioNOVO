@@ -72,7 +72,7 @@ export default function AuthPage() {
                 className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto lg:mx-0 overflow-hidden"
               >
                 <img 
-                  src="/attached_assets/bottons (3)_1755631449256.png" 
+                  src="/attached_assets/bottons_1755696963966.png" 
                   alt="Rafaela" 
                   className="w-full h-full object-cover"
                 />
@@ -131,7 +131,7 @@ export default function AuthPage() {
               className="text-center lg:text-left"
             >
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Entre ou crie sua conta para explorar meu portfólio completo
+                Entre ou crie sua conta para curtir e comentar nos projetos
               </p>
             </motion.div>
           </motion.div>
@@ -305,16 +305,7 @@ export default function AuthPage() {
               </CardContent>
             </Card>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="text-center mt-6"
-            >
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Admin: rafaelaolbo@gmail.com | senha: dattebayo
-              </p>
-            </motion.div>
+
           </motion.div>
         </div>
       </div>
