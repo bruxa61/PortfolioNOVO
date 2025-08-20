@@ -605,11 +605,13 @@ export class MemStorage implements IStorage {
   }
 
   async getProjects(): Promise<ProjectWithStats[]> {
-    return this.projects.map(project => ({
-      ...project,
-      likesCount: (this.projectLikesMap.get(project.id) || []).length,
-      commentsCount: (this.projectCommentsMap.get(project.id) || []).length,
-    }));
+    return this.projects
+      .filter(project => project.status === 'published')
+      .map(project => ({
+        ...project,
+        likesCount: (this.projectLikesMap.get(project.id) || []).length,
+        commentsCount: (this.projectCommentsMap.get(project.id) || []).length,
+      }));
   }
 
   async getProject(id: string): Promise<Project | undefined> {
@@ -648,11 +650,13 @@ export class MemStorage implements IStorage {
   }
 
   async getAchievements(): Promise<AchievementWithStats[]> {
-    return this.achievements.map(achievement => ({
-      ...achievement,
-      likesCount: (this.achievementLikesMap.get(achievement.id) || []).length,
-      commentsCount: (this.achievementCommentsMap.get(achievement.id) || []).length,
-    }));
+    return this.achievements
+      .filter(achievement => achievement.status === 'published')
+      .map(achievement => ({
+        ...achievement,
+        likesCount: (this.achievementLikesMap.get(achievement.id) || []).length,
+        commentsCount: (this.achievementCommentsMap.get(achievement.id) || []).length,
+      }));
   }
 
   async getAchievement(id: string): Promise<Achievement | undefined> {

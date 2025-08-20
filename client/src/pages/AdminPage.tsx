@@ -6,16 +6,16 @@ import AdminNew from "@/components/AdminNew";
 import { Button } from "@/components/ui/button";
 
 export default function AdminPage() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!user) {
       setLocation("/auth");
     }
-  }, [user, loading, setLocation]);
+  }, [user, setLocation]);
 
-  if (loading) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-white dark:bg-black">
         <Navigation />
