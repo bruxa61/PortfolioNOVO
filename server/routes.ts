@@ -89,7 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/projects/:id/like", isAuthenticated, async (req: any, res) => {
     try {
       const { id } = req.params;
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const liked = await storage.toggleProjectLike(id, userId);
       res.json({ liked });
     } catch (error) {
@@ -114,7 +114,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/projects/:id/comments", isAuthenticated, async (req: any, res) => {
     try {
       const { id } = req.params;
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const validatedData = insertProjectCommentSchema.parse({
         ...req.body,
         projectId: id,
@@ -242,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/achievements/:id/like", isAuthenticated, async (req: any, res) => {
     try {
       const { id } = req.params;
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const liked = await storage.toggleAchievementLike(id, userId);
       res.json({ liked });
     } catch (error) {
@@ -266,7 +266,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/achievements/:id/comments", isAuthenticated, async (req: any, res) => {
     try {
       const { id } = req.params;
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const validatedData = insertAchievementCommentSchema.parse(req.body);
       const comment = await storage.addAchievementComment({
         ...validatedData,

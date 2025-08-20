@@ -531,6 +531,18 @@ export default function Admin() {
                           />
                         </div>
                         
+                        <div className="grid gap-2">
+                          <Label htmlFor="project-image">Imagem de Capa</Label>
+                          <Input
+                            id="project-image"
+                            value={projectForm.image}
+                            onChange={(e) => setProjectForm({ ...projectForm, image: e.target.value })}
+                            placeholder="URL da imagem ou /attached_assets/nome-da-imagem.png"
+                            data-testid="input-project-image"
+                          />
+                          <p className="text-sm text-gray-500">Cole a URL da imagem ou use /attached_assets/ para imagens enviadas</p>
+                        </div>
+                        
                         <div className="grid grid-cols-2 gap-4">
                           <div className="grid gap-2">
                             <Label htmlFor="githubUrl">GitHub URL</Label>
@@ -728,6 +740,18 @@ export default function Admin() {
                             className="min-h-[100px]"
                             data-testid="input-achievement-description"
                           />
+                        </div>
+                        
+                        <div className="grid gap-2">
+                          <Label htmlFor="achievement-image">Imagem de Capa</Label>
+                          <Input
+                            id="achievement-image"
+                            value={achievementForm.image}
+                            onChange={(e) => setAchievementForm({ ...achievementForm, image: e.target.value })}
+                            placeholder="URL da imagem ou /attached_assets/nome-da-imagem.png"
+                            data-testid="input-achievement-image"
+                          />
+                          <p className="text-sm text-gray-500">Cole a URL da imagem ou use /attached_assets/ para imagens enviadas</p>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-4">
