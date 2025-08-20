@@ -7,6 +7,7 @@ import { promisify } from "util";
 import { storage } from "./storage";
 import { User, registerUserSchema, loginUserSchema, RegisterUser } from "@shared/schema";
 import connectPg from "connect-pg-simple";
+import MemoryStore from "memorystore";
 
 declare global {
   namespace Express {
@@ -36,12 +37,20 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function setupAuth(app: Express) {
-  // Session setup
-  const PostgresSessionStore = connectPg(session);
-  const sessionStore = new PostgresSessionStore({
-    conString: process.env.DATABASE_URL,
-    createTableIfMissing: true,
-  });
+  // Session setup - use PostgreSQL if available, otherwise fallback to memory store
+  let sessionStore;
+  if (process.env.DATABASE_URL) {
+    const PostgresSessionStore = connectPg(session);
+    sessionStore = new PostgresSessionStore({
+      conString: process.env.DATABASE_URL,
+      createTableIfMissing: true,
+    });
+  } else {
+    const MemStore = MemoryStore(session);
+    sessionStore = new MemStore({
+      checkPeriod: 86400000 // prune expired entries every 24h
+    });
+  }
 
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || 'dev-fallback-secret-key-change-in-production',

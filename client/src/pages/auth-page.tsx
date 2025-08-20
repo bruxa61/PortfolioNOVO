@@ -72,7 +72,7 @@ export default function AuthPage() {
                 className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto lg:mx-0 overflow-hidden"
               >
                 <img 
-                  src="/attached_assets/bottons_1755696963966.png" 
+                  src="/attached_assets/bottons (3)_1755710439265.png" 
                   alt="Rafaela" 
                   className="w-full h-full object-cover"
                 />
