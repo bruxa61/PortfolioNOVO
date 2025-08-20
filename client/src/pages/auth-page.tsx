@@ -69,9 +69,13 @@ export default function AuthPage() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring" }}
-                className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto lg:mx-0"
+                className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto lg:mx-0 overflow-hidden"
               >
-                <Heart className="h-10 w-10 text-white" />
+                <img 
+                  src="/attached_assets/bottons (3)_1755631449256.png" 
+                  alt="Rafaela" 
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
               
               <motion.h1

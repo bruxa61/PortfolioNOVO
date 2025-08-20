@@ -765,4 +765,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = db ? new DatabaseStorage() : new MemStorage();
+// Use MemStorage to avoid database schema conflicts for now
+export const storage = new MemStorage();

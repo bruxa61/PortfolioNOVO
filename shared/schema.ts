@@ -19,7 +19,7 @@ export const sessions = pgTable(
 // User storage table.
 // (IMPORTANT) This table is mandatory for Replit Auth, don't drop it.
 export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  id: integer("id").primaryKey(),
   email: varchar("email").unique().notNull(),
   password: varchar("password"), // For local authentication
   firstName: varchar("first_name"),
@@ -33,7 +33,7 @@ export const users = pgTable("users", {
 });
 
 export const projects = pgTable("projects", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  id: integer("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description").notNull(),
   image: text("image").notNull(),
@@ -49,7 +49,7 @@ export const projects = pgTable("projects", {
 });
 
 export const achievements = pgTable("achievements", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  id: integer("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description").notNull(),
   image: text("image"),
@@ -64,7 +64,7 @@ export const achievements = pgTable("achievements", {
 });
 
 export const experiences = pgTable("experiences", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  id: integer("id").primaryKey(),
   title: text("title").notNull(),
   company: text("company").notNull(),
   description: text("description").notNull(),
@@ -79,49 +79,49 @@ export const experiences = pgTable("experiences", {
 });
 
 export const projectLikes = pgTable("project_likes", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  projectId: varchar("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  id: integer("id").primaryKey(),
+  projectId: integer("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const projectComments = pgTable("project_comments", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  projectId: varchar("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  id: integer("id").primaryKey(),
+  projectId: integer("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const achievementLikes = pgTable("achievement_likes", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  achievementId: varchar("achievement_id").notNull().references(() => achievements.id, { onDelete: "cascade" }),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  id: integer("id").primaryKey(),
+  achievementId: integer("achievement_id").notNull().references(() => achievements.id, { onDelete: "cascade" }),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const achievementComments = pgTable("achievement_comments", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  achievementId: varchar("achievement_id").notNull().references(() => achievements.id, { onDelete: "cascade" }),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  id: integer("id").primaryKey(),
+  achievementId: integer("achievement_id").notNull().references(() => achievements.id, { onDelete: "cascade" }),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const notifications = pgTable("notifications", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  id: integer("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   type: varchar("type").notNull(), // comment, like
   entityType: varchar("entity_type").notNull(), // project, achievement
-  entityId: varchar("entity_id").notNull(),
-  fromUserId: varchar("from_user_id").references(() => users.id, { onDelete: "cascade" }),
+  entityId: integer("entity_id").notNull(),
+  fromUserId: integer("from_user_id").references(() => users.id, { onDelete: "cascade" }),
   message: text("message").notNull(),
   read: boolean("read").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const contacts = pgTable("contacts", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  id: integer("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
   subject: text("subject").notNull(),
