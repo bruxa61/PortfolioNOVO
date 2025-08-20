@@ -270,10 +270,10 @@ export default function Navigation() {
 
       {/* Profile Dialog */}
       <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px]" aria-describedby="profile-dialog-description">
           <DialogHeader>
             <DialogTitle>Editar Perfil</DialogTitle>
-            <DialogDescription>
+            <DialogDescription id="profile-dialog-description">
               Atualize sua foto de perfil aqui. Você pode escolher um arquivo ou colar uma URL.
             </DialogDescription>
           </DialogHeader>
@@ -289,12 +289,22 @@ export default function Navigation() {
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      setProfileImageUrl(`/attached_assets/${file.name}`);
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setProfileImageUrl(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
                     }
                   }}
                   data-testid="input-profile-image-file"
+                  className="hidden"
                 />
-                <Button type="button" variant="outline" size="sm">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => document.getElementById('profile-image-file')?.click()}
+                >
                   <Upload className="w-4 h-4 mr-2" />
                   Escolher Arquivo
                 </Button>

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle, ExternalLink, Award, Calendar } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -142,7 +142,8 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
 }
 
 export default function Achievements() {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
+  const isAuthenticated = !!user;
   
   const { data: achievements = [], isLoading } = useQuery<Achievement[]>({
     queryKey: ["/api/achievements"],

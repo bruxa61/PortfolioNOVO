@@ -542,12 +542,22 @@ export default function Admin() {
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (file) {
-                                  setProjectForm({ ...projectForm, image: `/attached_assets/${file.name}` });
+                                  const reader = new FileReader();
+                                  reader.onload = () => {
+                                    setProjectForm({ ...projectForm, image: reader.result as string });
+                                  };
+                                  reader.readAsDataURL(file);
                                 }
                               }}
                               data-testid="input-project-image-file"
+                              className="hidden"
                             />
-                            <Button type="button" variant="outline" size="sm">
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => document.getElementById('project-image')?.click()}
+                            >
                               <Upload className="w-4 h-4 mr-2" />
                               Escolher Arquivo
                             </Button>
@@ -770,12 +780,22 @@ export default function Admin() {
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (file) {
-                                  setAchievementForm({ ...achievementForm, image: `/attached_assets/${file.name}` });
+                                  const reader = new FileReader();
+                                  reader.onload = () => {
+                                    setAchievementForm({ ...achievementForm, image: reader.result as string });
+                                  };
+                                  reader.readAsDataURL(file);
                                 }
                               }}
                               data-testid="input-achievement-image-file"
+                              className="hidden"
                             />
-                            <Button type="button" variant="outline" size="sm">
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => document.getElementById('achievement-image')?.click()}
+                            >
                               <Upload className="w-4 h-4 mr-2" />
                               Escolher Arquivo
                             </Button>

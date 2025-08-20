@@ -41,6 +41,7 @@ export default function Contact() {
                 <a
                   href="mailto:rafaelaolbo@gmail.com"
                   className="flex items-center justify-center space-x-3 w-full py-4 px-6 bg-gradient-to-r from-primary-pink to-pink-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                  data-testid="button-email-contact"
                 >
                   <Mail className="h-5 w-5" />
                   <span className="font-medium">rafaelaolbo@gmail.com</span>

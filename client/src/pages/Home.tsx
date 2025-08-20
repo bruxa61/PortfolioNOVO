@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/use-auth";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -10,7 +10,8 @@ import Admin from "@/components/AdminNew";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const { isAdmin } = useAuth();
+  const { user } = useAuth();
+  const isAdmin = user?.isAdmin || false;
   
   return (
     <div className="min-h-screen bg-background">
