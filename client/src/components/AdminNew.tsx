@@ -17,7 +17,8 @@ import {
   Calendar,
   Star,
   BarChart3,
-  Award
+  Award,
+  Upload
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -533,14 +534,31 @@ export default function Admin() {
                         
                         <div className="grid gap-2">
                           <Label htmlFor="project-image">Imagem de Capa</Label>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              id="project-image"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  setProjectForm({ ...projectForm, image: `/attached_assets/${file.name}` });
+                                }
+                              }}
+                              data-testid="input-project-image-file"
+                            />
+                            <Button type="button" variant="outline" size="sm">
+                              <Upload className="w-4 h-4 mr-2" />
+                              Escolher Arquivo
+                            </Button>
+                          </div>
                           <Input
-                            id="project-image"
                             value={projectForm.image}
                             onChange={(e) => setProjectForm({ ...projectForm, image: e.target.value })}
-                            placeholder="URL da imagem ou /attached_assets/nome-da-imagem.png"
-                            data-testid="input-project-image"
+                            placeholder="Ou cole a URL da imagem"
+                            data-testid="input-project-image-url"
                           />
-                          <p className="text-sm text-gray-500">Cole a URL da imagem ou use /attached_assets/ para imagens enviadas</p>
+                          <p className="text-sm text-gray-500">Escolha um arquivo ou cole uma URL de imagem</p>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-4">
@@ -744,14 +762,31 @@ export default function Admin() {
                         
                         <div className="grid gap-2">
                           <Label htmlFor="achievement-image">Imagem de Capa</Label>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              id="achievement-image"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  setAchievementForm({ ...achievementForm, image: `/attached_assets/${file.name}` });
+                                }
+                              }}
+                              data-testid="input-achievement-image-file"
+                            />
+                            <Button type="button" variant="outline" size="sm">
+                              <Upload className="w-4 h-4 mr-2" />
+                              Escolher Arquivo
+                            </Button>
+                          </div>
                           <Input
-                            id="achievement-image"
                             value={achievementForm.image}
                             onChange={(e) => setAchievementForm({ ...achievementForm, image: e.target.value })}
-                            placeholder="URL da imagem ou /attached_assets/nome-da-imagem.png"
-                            data-testid="input-achievement-image"
+                            placeholder="Ou cole a URL da imagem"
+                            data-testid="input-achievement-image-url"
                           />
-                          <p className="text-sm text-gray-500">Cole a URL da imagem ou use /attached_assets/ para imagens enviadas</p>
+                          <p className="text-sm text-gray-500">Escolha um arquivo ou cole uma URL de imagem</p>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-4">

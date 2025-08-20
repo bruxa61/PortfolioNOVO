@@ -70,9 +70,6 @@ export default function Projects() {
         description: "Faça login para curtir os projetos.",
         variant: "destructive",
       });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 1500);
       return;
     }
     toggleLikeMutation.mutate(projectId);
@@ -108,7 +105,7 @@ export default function Projects() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects?.map((project) => (
-              <div key={project.id} className="gradient-border fade-in group">
+              <div key={project.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl border border-gray-200 dark:border-gray-700 transition-all duration-300 fade-in group backdrop-blur-sm">
                 <div className="p-6 h-full flex flex-col">
                   <div className="relative overflow-hidden rounded-lg mb-4">
                     <img 

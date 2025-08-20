@@ -69,13 +69,9 @@ export default function AuthPage() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring" }}
-                className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto lg:mx-0 overflow-hidden"
+                className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto lg:mx-0"
               >
-                <img 
-                  src="/attached_assets/vaca rosa_1755711212970.png" 
-                  alt="Rafaela" 
-                  className="w-full h-full object-cover"
-                />
+                <Code className="w-10 h-10 text-white" />
               </motion.div>
               
               <motion.h1

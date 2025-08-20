@@ -194,4 +194,28 @@ export function setupAuth(app: Express) {
     const { password: _, ...userWithoutPassword } = req.user as User;
     res.json(userWithoutPassword);
   });
+
+  // Update user profile
+  app.put("/api/user/profile", (req: any, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Não autenticado" });
+    }
+    
+    try {
+      const { profileImageUrl } = req.body;
+      const userId = req.user.id;
+      
+      // For in-memory storage, we'll just update the user session
+      if (req.user) {
+        req.user.profileImageUrl = profileImageUrl;
+        req.session.passport.user.profileImageUrl = profileImageUrl;
+      }
+      
+      const { password: _, ...userWithoutPassword } = req.user as User;
+      res.json(userWithoutPassword);
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  });
 }

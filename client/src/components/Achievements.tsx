@@ -43,7 +43,7 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
   };
 
   return (
-    <Card className="group h-full transition-all duration-300 hover:shadow-lg hover:shadow-pink-100 dark:hover:shadow-pink-900/20 border-gray-200 dark:border-gray-700">
+    <Card className="group h-full transition-all duration-300 hover:shadow-2xl hover:shadow-pink-200/50 dark:hover:shadow-pink-900/30 border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg">
       {achievement.image && (
         <div className="aspect-video overflow-hidden rounded-t-lg">
           <img

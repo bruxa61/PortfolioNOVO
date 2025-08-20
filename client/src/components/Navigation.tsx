@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { Menu, X, LogOut, Settings, User, LogIn } from "lucide-react";
+import { Menu, X, LogOut, Settings, User, LogIn, Upload } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,15 +11,47 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Link } from "wouter";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import avatarImage from "@assets/bottons (3)_1755631449256.png";
 
 export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("inicio");
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState("");
   const { user, logoutMutation } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const isAuthenticated = !!user;
   const isAdmin = user?.isAdmin || false;
+
+  // Update profile mutation
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: { profileImageUrl: string }) => {
+      const response = await apiRequest("PUT", "/api/user/profile", data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      toast({
+        title: "Perfil atualizado",
+        description: "Sua foto de perfil foi atualizada com sucesso.",
+      });
+      setIsProfileDialogOpen(false);
+      setProfileImageUrl("");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Erro ao atualizar perfil",
+        description: error.message || "Tente novamente",
+        variant: "destructive",
+      });
+    },
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -138,6 +172,10 @@ export default function Navigation() {
                         </div>
                       </div>
                       <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => setIsProfileDialogOpen(true)}>
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Editar Perfil</span>
+                      </DropdownMenuItem>
                       {isAdmin && (
                         <DropdownMenuItem onClick={() => scrollToSection("admin")}>
                           <Settings className="mr-2 h-4 w-4" />
@@ -229,6 +267,74 @@ export default function Navigation() {
           </div>
         </div>
       )}
+
+      {/* Profile Dialog */}
+      <Dialog open={isProfileDialogOpen} onOpenChange={setIsProfileDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Editar Perfil</DialogTitle>
+            <DialogDescription>
+              Atualize sua foto de perfil aqui. Você pode escolher um arquivo ou colar uma URL.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="profile-image">Foto de Perfil</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  id="profile-image-file"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setProfileImageUrl(`/attached_assets/${file.name}`);
+                    }
+                  }}
+                  data-testid="input-profile-image-file"
+                />
+                <Button type="button" variant="outline" size="sm">
+                  <Upload className="w-4 h-4 mr-2" />
+                  Escolher Arquivo
+                </Button>
+              </div>
+              <Input
+                value={profileImageUrl}
+                onChange={(e) => setProfileImageUrl(e.target.value)}
+                placeholder="Ou cole a URL da imagem"
+                data-testid="input-profile-image-url"
+              />
+              <p className="text-sm text-gray-500">Escolha um arquivo ou cole uma URL de imagem</p>
+            </div>
+            
+            {/* Preview */}
+            {profileImageUrl && (
+              <div className="flex justify-center">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center overflow-hidden">
+                  <img 
+                    src={profileImageUrl} 
+                    alt="Preview" 
+                    className="w-full h-full object-cover"
+                    onError={() => setProfileImageUrl("")}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <DialogFooter>
+            <Button
+              type="submit"
+              onClick={() => updateProfileMutation.mutate({ profileImageUrl })}
+              disabled={updateProfileMutation.isPending || !profileImageUrl}
+              data-testid="button-save-profile"
+            >
+              {updateProfileMutation.isPending ? "Salvando..." : "Salvar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </nav>
   );
 }
