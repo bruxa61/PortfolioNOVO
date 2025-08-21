@@ -6,7 +6,7 @@ import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
-import { storage } from "./storage";
+import { storage } from "./storage-simple";
 
 // Skip Replit auth setup in production if REPLIT_DOMAINS is not set
 const skipAuth = !process.env.REPLIT_DOMAINS;
@@ -89,7 +89,7 @@ export async function setupAuth(app: Express) {
     const user = {};
     updateUserSession(user, tokens);
     await upsertUser(tokens.claims());
-    verified(null, user);
+    verified(null, user as any);
   };
 
   for (const domain of process.env

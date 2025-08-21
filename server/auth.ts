@@ -4,7 +4,7 @@ import { Express } from "express";
 import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
-import { storage } from "./storage";
+import { storage } from "./storage-simple";
 import { User, registerUserSchema, loginUserSchema, RegisterUser } from "@shared/schema";
 import connectPg from "connect-pg-simple";
 import MemoryStore from "memorystore";

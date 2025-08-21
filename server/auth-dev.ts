@@ -1,5 +1,5 @@
 import type { Express, RequestHandler } from "express";
-import { storage } from "./storage";
+import { storage } from "./storage-simple";
 
 // Simple development auth that simulates Replit OAuth behavior
 export async function setupAuth(app: Express) {
