@@ -9,12 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Heart, Code, Sparkles, LogIn, UserPlus } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function AuthPage() {
   const { user, loginMutation, registerMutation } = useAuth();
   const [, setLocation] = useLocation();
+  const [rememberMe, setRememberMe] = useState(false);
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -41,7 +43,34 @@ export default function AuthPage() {
     },
   });
 
+  // Load saved credentials on component mount
+  useEffect(() => {
+    const savedCredentials = localStorage.getItem('savedLoginCredentials');
+    if (savedCredentials) {
+      try {
+        const { email, password, remember } = JSON.parse(savedCredentials);
+        loginForm.setValue('email', email);
+        loginForm.setValue('password', password);
+        setRememberMe(remember);
+      } catch (error) {
+        console.error('Error loading saved credentials:', error);
+        localStorage.removeItem('savedLoginCredentials');
+      }
+    }
+  }, [loginForm]);
+
   const onLogin = (data: LoginUser) => {
+    // Save credentials if user wants to remember them
+    if (rememberMe) {
+      localStorage.setItem('savedLoginCredentials', JSON.stringify({
+        email: data.email,
+        password: data.password,
+        remember: true
+      }));
+    } else {
+      localStorage.removeItem('savedLoginCredentials');
+    }
+    
     loginMutation.mutate(data);
   };
 
@@ -193,6 +222,18 @@ export default function AuthPage() {
                             {loginForm.formState.errors.password.message}
                           </p>
                         )}
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="remember-me"
+                          checked={rememberMe}
+                          onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                          data-testid="checkbox-remember-me"
+                        />
+                        <Label htmlFor="remember-me" className="text-sm text-gray-600 dark:text-gray-400">
+                          Lembrar meus dados
+                        </Label>
                       </div>
 
                       <Button
