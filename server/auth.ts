@@ -6,7 +6,6 @@ import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage-simple";
 import { User, registerUserSchema, loginUserSchema, RegisterUser } from "@shared/schema";
-import connectPg from "connect-pg-simple";
 import MemoryStore from "memorystore";
 
 declare global {
@@ -37,20 +36,11 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function setupAuth(app: Express) {
-  // Session setup - use PostgreSQL if available, otherwise fallback to memory store
-  let sessionStore;
-  if (process.env.DATABASE_URL) {
-    const PostgresSessionStore = connectPg(session);
-    sessionStore = new PostgresSessionStore({
-      conString: process.env.DATABASE_URL,
-      createTableIfMissing: true,
-    });
-  } else {
-    const MemStore = MemoryStore(session);
-    sessionStore = new MemStore({
-      checkPeriod: 86400000 // prune expired entries every 24h
-    });
-  }
+  // Session setup - use memory store for now to avoid database issues
+  const MemStore = MemoryStore(session);
+  const sessionStore = new MemStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  });
 
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || 'dev-fallback-secret-key-change-in-production',
@@ -94,13 +84,19 @@ export function setupAuth(app: Express) {
     )
   );
 
-  passport.serializeUser((user, done) => done(null, user.id));
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
   
   passport.deserializeUser(async (id: string, done) => {
     try {
       const user = await storage.getUser(id);
+      if (!user) {
+        return done(null, false);
+      }
       done(null, user);
     } catch (error) {
+      console.error('Error deserializing user:', error);
       done(error, null);
     }
   });

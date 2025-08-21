@@ -28,6 +28,7 @@ export default function Navigation() {
   const queryClient = useQueryClient();
   const isAuthenticated = !!user;
   const isAdmin = user?.isAdmin || false;
+  
 
   // Update profile mutation
   const updateProfileMutation = useMutation({
