@@ -206,7 +206,7 @@ export class DatabaseStorage implements IStorage {
   async createProject(insertProject: InsertProject): Promise<Project> {
     if (!db) throw new Error("Database not available");
     try {
-      const [project] = await db.insert(projects).values(insertProject).returning();
+      const [project] = await db.insert(projects).values({ id: randomUUID(), ...insertProject }).returning();
       return project;
     } catch (error) {
       console.error("Database error in createProject:", error);
@@ -285,7 +285,7 @@ export class DatabaseStorage implements IStorage {
   async createAchievement(insertAchievement: InsertAchievement): Promise<Achievement> {
     if (!db) throw new Error("Database not available");
     try {
-      const [achievement] = await db.insert(achievements).values(insertAchievement).returning();
+      const [achievement] = await db.insert(achievements).values({ id: randomUUID(), ...insertAchievement }).returning();
       return achievement;
     } catch (error) {
       console.error("Database error in createAchievement:", error);
@@ -330,7 +330,7 @@ export class DatabaseStorage implements IStorage {
   async createExperience(insertExperience: InsertExperience): Promise<Experience> {
     if (!db) throw new Error("Database not available");
     try {
-      const [experience] = await db.insert(experiences).values(insertExperience).returning();
+      const [experience] = await db.insert(experiences).values({ id: randomUUID(), ...insertExperience }).returning();
       return experience;
     } catch (error) {
       console.error("Database error in createExperience:", error);
@@ -374,7 +374,7 @@ export class DatabaseStorage implements IStorage {
         await db.delete(projectLikes).where(eq(projectLikes.id, existingLike.id));
         return false;
       } else {
-        await db.insert(projectLikes).values({ projectId, userId });
+        await db.insert(projectLikes).values({ id: randomUUID(), projectId, userId });
         return true;
       }
     } catch (error) {
@@ -395,7 +395,7 @@ export class DatabaseStorage implements IStorage {
         await db.delete(achievementLikes).where(eq(achievementLikes.id, existingLike.id));
         return false;
       } else {
-        await db.insert(achievementLikes).values({ achievementId, userId });
+        await db.insert(achievementLikes).values({ id: randomUUID(), achievementId, userId });
         return true;
       }
     } catch (error) {
@@ -417,10 +417,13 @@ export class DatabaseStorage implements IStorage {
           user: {
             id: users.id,
             email: users.email,
+            password: users.password,
             firstName: users.firstName,
             lastName: users.lastName,
             profileImageUrl: users.profileImageUrl,
             isAdmin: users.isAdmin,
+            provider: users.provider,
+            providerId: users.providerId,
             createdAt: users.createdAt,
             updatedAt: users.updatedAt,
           },
@@ -438,7 +441,7 @@ export class DatabaseStorage implements IStorage {
   async addProjectComment(insertComment: InsertProjectComment): Promise<ProjectComment> {
     if (!db) throw new Error("Database not available");
     try {
-      const [comment] = await db.insert(projectComments).values(insertComment).returning();
+      const [comment] = await db.insert(projectComments).values({ id: randomUUID(), ...insertComment }).returning();
       return comment;
     } catch (error) {
       console.error("Database error in addProjectComment:", error);
@@ -459,10 +462,13 @@ export class DatabaseStorage implements IStorage {
           user: {
             id: users.id,
             email: users.email,
+            password: users.password,
             firstName: users.firstName,
             lastName: users.lastName,
             profileImageUrl: users.profileImageUrl,
             isAdmin: users.isAdmin,
+            provider: users.provider,
+            providerId: users.providerId,
             createdAt: users.createdAt,
             updatedAt: users.updatedAt,
           },
@@ -480,7 +486,7 @@ export class DatabaseStorage implements IStorage {
   async addAchievementComment(insertComment: InsertAchievementComment): Promise<AchievementComment> {
     if (!db) throw new Error("Database not available");
     try {
-      const [comment] = await db.insert(achievementComments).values(insertComment).returning();
+      const [comment] = await db.insert(achievementComments).values({ id: randomUUID(), ...insertComment }).returning();
       return comment;
     } catch (error) {
       console.error("Database error in addAchievementComment:", error);
@@ -491,7 +497,7 @@ export class DatabaseStorage implements IStorage {
   async createContact(insertContact: InsertContact): Promise<Contact> {
     if (!db) throw new Error("Database not available");
     try {
-      const [contact] = await db.insert(contacts).values(insertContact).returning();
+      const [contact] = await db.insert(contacts).values({ id: randomUUID(), ...insertContact }).returning();
       return contact;
     } catch (error) {
       console.error("Database error in createContact:", error);
