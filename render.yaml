@@ -8,7 +8,5 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
-    # IMPORTANTE: NÃO configure REPLIT_DOMAINS
-    # A aplicação detecta automaticamente e funciona sem autenticação
+    # IMPORTANTE: NÃO configure REPLIT_DOMAINS ou PORT
+    # O Render define PORT automaticamente e a aplicação detecta o ambiente

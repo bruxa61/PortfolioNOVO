@@ -8,10 +8,11 @@ Configure as seguintes variáveis de ambiente no painel do Render:
 
 ```
 NODE_ENV=production
-PORT=10000
 ```
 
-**IMPORTANTE**: NÃO configure `REPLIT_DOMAINS` - deixe essa variável ausente para que a aplicação funcione em modo produção sem autenticação do Replit.
+**IMPORTANTE**: 
+- NÃO configure `REPLIT_DOMAINS` - deixe essa variável ausente para que a aplicação funcione em modo produção sem autenticação do Replit.
+- NÃO configure `PORT` - o Render define automaticamente a porta correta e a aplicação se adapta automaticamente.
 
 ### 2. Configurações do Serviço
 
