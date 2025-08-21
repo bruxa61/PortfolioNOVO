@@ -46,11 +46,21 @@ export default function Navigation() {
       setProfileImageUrl("");
     },
     onError: (error: any) => {
-      toast({
-        title: "Erro ao atualizar perfil",
-        description: error.message || "Tente novamente",
-        variant: "destructive",
-      });
+      console.error('Erro ao atualizar perfil:', error);
+      if (error.message.includes('401') || error.message.includes('Não autenticado')) {
+        toast({
+          title: "Sessão expirada",
+          description: "Por favor, faça login novamente para continuar.",
+          variant: "destructive",
+        });
+        queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      } else {
+        toast({
+          title: "Erro ao atualizar perfil",
+          description: error.message || "Tente novamente",
+          variant: "destructive",
+        });
+      }
     },
   });
 

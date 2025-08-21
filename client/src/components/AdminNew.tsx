@@ -21,6 +21,8 @@ import {
   Upload
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
+import { Link } from "wouter";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -97,6 +99,9 @@ interface AchievementForm {
 }
 
 export default function Admin() {
+  const { user } = useAuth();
+  const isAuthenticated = !!user;
+  const isAdmin = user?.isAdmin || false;
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
   const [isAchievementDialogOpen, setIsAchievementDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -163,11 +168,22 @@ export default function Admin() {
       });
     },
     onError: (error: Error) => {
-      toast({
-        title: "Erro",
-        description: error.message || "Erro ao criar projeto.",
-        variant: "destructive",
-      });
+      console.error('Erro ao criar projeto:', error);
+      if (error.message.includes('401') || error.message.includes('Não autenticado')) {
+        toast({
+          title: "Sessão expirada",
+          description: "Por favor, faça login novamente para continuar.",
+          variant: "destructive",
+        });
+        // Invalidate user query to force re-authentication
+        queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      } else {
+        toast({
+          title: "Erro",
+          description: error.message || "Erro ao criar projeto.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
@@ -191,11 +207,21 @@ export default function Admin() {
       });
     },
     onError: (error: Error) => {
-      toast({
-        title: "Erro",
-        description: error.message || "Erro ao atualizar projeto.",
-        variant: "destructive",
-      });
+      console.error('Erro ao atualizar projeto:', error);
+      if (error.message.includes('401') || error.message.includes('Não autenticado')) {
+        toast({
+          title: "Sessão expirada",
+          description: "Por favor, faça login novamente para continuar.",
+          variant: "destructive",
+        });
+        queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      } else {
+        toast({
+          title: "Erro",
+          description: error.message || "Erro ao atualizar projeto.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
@@ -212,11 +238,21 @@ export default function Admin() {
       });
     },
     onError: (error: Error) => {
-      toast({
-        title: "Erro",
-        description: error.message || "Erro ao excluir projeto.",
-        variant: "destructive",
-      });
+      console.error('Erro ao excluir projeto:', error);
+      if (error.message.includes('401') || error.message.includes('Não autenticado')) {
+        toast({
+          title: "Sessão expirada",
+          description: "Por favor, faça login novamente para continuar.",
+          variant: "destructive",
+        });
+        queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      } else {
+        toast({
+          title: "Erro",
+          description: error.message || "Erro ao excluir projeto.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
@@ -236,11 +272,21 @@ export default function Admin() {
       });
     },
     onError: (error: Error) => {
-      toast({
-        title: "Erro",
-        description: error.message || "Erro ao criar conquista.",
-        variant: "destructive",
-      });
+      console.error('Erro ao criar conquista:', error);
+      if (error.message.includes('401') || error.message.includes('Não autenticado')) {
+        toast({
+          title: "Sessão expirada",
+          description: "Por favor, faça login novamente para continuar.",
+          variant: "destructive",
+        });
+        queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      } else {
+        toast({
+          title: "Erro",
+          description: error.message || "Erro ao criar conquista.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
@@ -469,6 +515,32 @@ export default function Admin() {
           </Card>
         </div>
 
+        {/* Authentication Check */}
+        {!isAuthenticated ? (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Acesso Restrito
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Você precisa estar logado para acessar o painel administrativo.
+            </p>
+            <Link href="/auth">
+              <Button className="bg-pink-600 hover:bg-pink-700 text-white">
+                Fazer Login
+              </Button>
+            </Link>
+          </div>
+        ) : !isAdmin ? (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Acesso Negado
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              Você não tem permissão para acessar esta área.
+            </p>
+          </div>
+        ) : (
+        <div>
         {/* Management Tabs */}
         <Tabs defaultValue="projects" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
@@ -1020,6 +1092,8 @@ export default function Admin() {
             </Card>
           </TabsContent>
         </Tabs>
+        </div>
+        )}
       </div>
     </section>
   );
