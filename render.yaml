@@ -3,7 +3,7 @@ services:
     name: portfolio-rafaela
     env: node
     plan: free
-    buildCommand: npm run build && npm run db:push
+    buildCommand: npm run build
     startCommand: npm run start
     envVars:
       - key: NODE_ENV
