@@ -12,6 +12,8 @@ services:
         fromDatabase:
           name: portfolio-db
           property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
     # IMPORTANTE: NÃO configure REPLIT_DOMAINS ou PORT
     # O Render define PORT automaticamente e a aplicação detecta o ambiente
 

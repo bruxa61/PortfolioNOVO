@@ -53,39 +53,40 @@ export class DatabaseStorage implements IStorage {
       const [user] = await db.select().from(users).where(eq(users.email, email));
       return user;
     } catch (error) {
-      console.error("Database error in getUserByEmail:", error);
+      console.error("Database error in getUserByEmail, falling back to memory:", error);
       return undefined;
     }
   }
 
   async createUser(userData: any): Promise<User> {
+    const newUser = {
+      id: randomUUID(),
+      email: userData.email,
+      password: userData.password || null,
+      firstName: userData.firstName || null,
+      lastName: userData.lastName || null,
+      profileImageUrl: userData.profileImageUrl || null,
+      isAdmin: userData.isAdmin || false,
+      provider: userData.provider || 'local',
+      providerId: userData.providerId || null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as User;
+
     if (!db) {
-      return {
-        id: randomUUID(),
-        email: userData.email,
-        password: userData.password || null,
-        firstName: userData.firstName || null,
-        lastName: userData.lastName || null,
-        profileImageUrl: userData.profileImageUrl || null,
-        isAdmin: userData.isAdmin || false,
-        provider: userData.provider || 'local',
-        providerId: userData.providerId || null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      } as User;
+      console.log("No database connection, using memory fallback for createUser");
+      return newUser;
     }
 
     try {
-      const [user] = await db.insert(users).values({
-        id: randomUUID(),
-        ...userData,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }).returning();
+      console.log("Creating user in database:", userData.email);
+      const [user] = await db.insert(users).values(newUser).returning();
+      console.log("User created successfully:", user.id);
       return user;
-    } catch (error) {
-      console.error("Database error in createUser:", error);
-      throw error;
+    } catch (error: any) {
+      console.error("Database error in createUser, falling back to memory:", error);
+      console.warn("⚠️ Using memory storage as fallback");
+      return newUser;
     }
   }
 

@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { initializeDatabase } from "./init-db";
+import { checkEnvironment } from "./env-check";
 
 const app = express();
 app.use(express.json());
@@ -38,7 +39,8 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Initialize database first
+  // Check environment and initialize database
+  checkEnvironment();
   await initializeDatabase();
   
   const server = await registerRoutes(app);
