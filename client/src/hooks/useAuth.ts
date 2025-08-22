@@ -1,19 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import type { User } from "@shared/schema";
+import { useAuth as useAuthContext } from "./use-auth";
 
 export function useAuth() {
-  const { data: user, isLoading } = useQuery<User>({
-    queryKey: ["/api/auth/user"],
-    retry: false,
-  });
-
+  const auth = useAuthContext();
+  
   // Check if user is admin based on email
-  const isAdmin = user?.email === "rafaelaolbo@gmail.com";
-
+  const isAdmin = auth.user?.email === "rafaelaolbo@gmail.com";
+  
   return {
-    user,
-    isLoading,
-    isAuthenticated: !!user,
+    ...auth,
+    isAuthenticated: !!auth.user,
     isAdmin,
   };
 }
