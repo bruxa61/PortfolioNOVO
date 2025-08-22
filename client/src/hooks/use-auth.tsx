@@ -29,6 +29,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   } = useQuery<User | undefined, Error>({
     queryKey: ["/api/auth/user"],
     queryFn: getQueryFn({ on401: "returnNull" }),
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
   const loginMutation = useMutation({
@@ -38,12 +40,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (user: User) => {
       queryClient.setQueryData(["/api/auth/user"], user);
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       toast({
         title: "Login realizado com sucesso!",
         description: `Bem-vindo(a), ${user.firstName}!`,
       });
     },
     onError: (error: Error) => {
+      console.error("Login error:", error);
       toast({
         title: "Erro no login",
         description: error.message || "Credenciais inválidas",
@@ -59,12 +63,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (user: User) => {
       queryClient.setQueryData(["/api/auth/user"], user);
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       toast({
         title: "Conta criada com sucesso!",
         description: `Bem-vindo(a), ${user.firstName}!`,
       });
     },
     onError: (error: Error) => {
+      console.error("Register error:", error);
       toast({
         title: "Erro no cadastro",
         description: error.message || "Erro ao criar conta",
@@ -79,11 +85,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: () => {
       queryClient.setQueryData(["/api/auth/user"], null);
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.clear();
       toast({
         title: "Logout realizado com sucesso!",
       });
     },
     onError: (error: Error) => {
+      console.error("Logout error:", error);
       toast({
         title: "Erro no logout",
         description: error.message,

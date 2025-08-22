@@ -1,3 +1,4 @@
+// Compatibility hook that redirects to use-auth
 import { useAuth as useAuthContext } from "./use-auth";
 
 export function useAuth() {
