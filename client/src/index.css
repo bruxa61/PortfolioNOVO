@@ -49,25 +49,29 @@
 }
 
 .dark {
-  --background: hsl(222, 84%, 5%);
+  --background: hsl(210, 30%, 8%);
   --foreground: hsl(210, 40%, 98%);
-  --card: hsl(222, 84%, 8%);
-  --card-foreground: hsl(210, 40%, 95%);
-  --popover: hsl(222, 84%, 8%);
+  --card: hsl(210, 30%, 12%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(210, 30%, 12%);
   --popover-foreground: hsl(210, 40%, 98%);
   --primary: hsl(325, 69%, 63%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(217, 32%, 17%);
-  --secondary-foreground: hsl(210, 40%, 95%);
-  --muted: hsl(217, 32%, 17%);
-  --muted-foreground: hsl(215, 20%, 65%);
-  --accent: hsl(217, 32%, 17%);
-  --accent-foreground: hsl(210, 40%, 95%);
-  --destructive: hsl(356.3033, 90.5579%, 54.3137%);
+  --secondary: hsl(210, 30%, 18%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(210, 30%, 15%);
+  --muted-foreground: hsl(210, 40%, 75%);
+  --accent: hsl(210, 30%, 15%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --border: hsl(217, 32%, 17%);
-  --input: hsl(217, 32%, 17%);
+  --border: hsl(210, 30%, 20%);
+  --input: hsl(210, 30%, 15%);
   --ring: hsl(325, 69%, 63%);
+  
+  /* Custom dark theme colors */
+  --dark-gray: hsl(210, 40%, 95%);
+  --light-gray: hsl(210, 30%, 8%);
 }
 
 @layer base {
@@ -116,6 +120,23 @@
   }
 
   .dark .hero-gradient {
-    background: linear-gradient(135deg, hsl(222, 84%, 8%) 0%, hsl(222, 84%, 5%) 100%);
+    background: linear-gradient(135deg, hsl(210, 30%, 12%) 0%, hsl(210, 30%, 8%) 100%);
+  }
+
+  /* Dark theme improvements */
+  .dark .bg-light-gray {
+    background-color: hsl(210, 30%, 10%) !important;
+  }
+
+  .dark .text-gray-600 {
+    color: hsl(210, 40%, 80%) !important;
+  }
+
+  .dark .text-gray-700 {
+    color: hsl(210, 40%, 85%) !important;
+  }
+
+  .dark .text-gray-500 {
+    color: hsl(210, 40%, 75%) !important;
   }
 }

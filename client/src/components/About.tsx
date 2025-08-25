@@ -8,14 +8,14 @@ export default function About() {
     <section id="sobre" className="py-20 bg-light-gray">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold text-dark-gray mb-4">Sobre mim</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Sobre mim</h2>
           <div className="w-24 h-1 bg-primary-pink mx-auto rounded-full"></div>
         </div>
         
         <div className="max-w-4xl mx-auto">
           <div className="fade-in">
             <div className="space-y-6">
-              <p className="text-lg text-gray-600 leading-relaxed text-justify">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed text-justify">
                 Apaixonada por tecnologia e formada em Análise e Desenvolvimento de Sistemas pelo SENAI "Morvan Figueiredo", atualmente cursando <strong className="text-primary-pink">Desenvolvimento de Software Multiplataforma na FATEC</strong>, busco constantemente aprimorar minhas habilidades na área. Meu portfólio demonstra como realizo a união entre a lógica da programação com a criatividade do design, resultando em projetos visualmente atraentes e com foco em conversão. Tenho um <strong className="text-primary-pink">forte interesse por front-end e design</strong>, o que me permite criar peças eficazes e com ótima experiência para o usuário.
               </p>
               

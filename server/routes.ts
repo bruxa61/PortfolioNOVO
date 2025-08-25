@@ -206,7 +206,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin - Create achievement
   app.post("/api/achievements", isAuthenticated, isAdmin, async (req, res) => {
     try {
-      const validatedData = insertAchievementSchema.parse(req.body);
+      // Convert date string to Date object if needed
+      const processedBody = {
+        ...req.body,
+        date: req.body.date ? new Date(req.body.date) : new Date()
+      };
+      const validatedData = insertAchievementSchema.parse(processedBody);
       const achievement = await storage.createAchievement(validatedData);
       res.json(achievement);
     } catch (error) {
@@ -226,7 +231,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/achievements/:id", isAuthenticated, isAdmin, async (req, res) => {
     try {
       const { id } = req.params;
-      const validatedData = insertAchievementSchema.partial().parse(req.body);
+      // Convert date string to Date object if needed
+      const processedBody = {
+        ...req.body,
+        date: req.body.date ? new Date(req.body.date) : undefined
+      };
+      const validatedData = insertAchievementSchema.partial().parse(processedBody);
       const achievement = await storage.updateAchievement(id, validatedData);
       res.json(achievement);
     } catch (error) {
