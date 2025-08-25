@@ -16,7 +16,16 @@ export function useScrollAnimation() {
     }, observerOptions);
 
     const elements = document.querySelectorAll(".fade-in");
+    
+    // Check if elements are already in view and make them visible immediately
     elements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+      
+      if (isInView) {
+        el.classList.add("visible");
+      }
+      
       observer.observe(el);
     });
 
