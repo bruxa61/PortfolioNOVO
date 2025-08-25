@@ -23,6 +23,7 @@ export default function Projects() {
     queryKey: ["/api/projects"],
   });
 
+
   const toggleLikeMutation = useMutation({
     mutationFn: async (projectId: string) => {
       const response = await apiRequest("POST", `/api/projects/${projectId}/like`);
@@ -103,9 +104,9 @@ export default function Projects() {
           <div className="flex justify-center items-center py-20">
             <Loader2 className="animate-spin text-primary-pink" size={48} />
           </div>
-        ) : (
+        ) : projects && projects.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects?.map((project) => (
+            {projects.map((project) => (
               <div key={project.id} className="bg-white rounded-xl shadow-lg hover:shadow-2xl border border-gray-200 transition-all duration-300 fade-in group backdrop-blur-sm">
                 <div className="p-6 h-full flex flex-col">
                   <div className="relative overflow-hidden rounded-lg mb-4">
@@ -217,6 +218,15 @@ export default function Projects() {
                 </div>
               </div>
             ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <p className="text-gray-500 text-lg">
+              Nenhum projeto encontrado no momento.
+            </p>
+            <p className="text-gray-400 text-sm mt-2">
+              Em breve novos projetos serão adicionados!
+            </p>
           </div>
         )}
         
