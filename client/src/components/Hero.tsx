@@ -28,13 +28,13 @@ export default function Hero() {
               />
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-dark-gray mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
             Olá, eu sou <span className="text-primary-pink">Rafaela</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 font-light">
+          <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-200 mb-8 font-light">
             Desenvolvedora Full Stack em formação
           </p>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto mb-12 leading-relaxed">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12 leading-relaxed">
             Estudante de Análise e Desenvolvimento de Sistemas, apaixonada por criar soluções digitais inovadoras
             e explorar o mundo da programação.
           </p>
@@ -59,7 +59,7 @@ export default function Hero() {
               href="https://github.com/bruxa61"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-500 hover:text-primary-pink transition-colors text-2xl"
+              className="text-gray-600 dark:text-gray-300 hover:text-primary-pink transition-colors text-2xl"
             >
               <Github size={32} />
             </a>
@@ -67,7 +67,7 @@ export default function Hero() {
               href="https://www.linkedin.com/in/rafaela-botelho-76a4a72b0/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-500 hover:text-primary-pink transition-colors text-2xl"
+              className="text-gray-600 dark:text-gray-300 hover:text-primary-pink transition-colors text-2xl"
             >
               <Linkedin size={32} />
             </a>

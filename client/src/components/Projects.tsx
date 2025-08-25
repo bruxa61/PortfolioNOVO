@@ -92,9 +92,9 @@ export default function Projects() {
     <section id="projetos" className="py-20 bg-light-gray">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold text-dark-gray mb-4">Meus Projetos</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Meus Projetos</h2>
           <div className="w-24 h-1 bg-primary-pink mx-auto rounded-full"></div>
-          <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+          <p className="text-gray-700 dark:text-gray-300 mt-4 max-w-2xl mx-auto">
             Alguns dos projetos que desenvolvi durante minha jornada de aprendizado
           </p>
         </div>
@@ -119,7 +119,7 @@ export default function Projects() {
                       <div className="space-x-4">
                         <button
                           onClick={() => setSelectedProject(project)}
-                          className="bg-white text-dark-gray px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
+                          className="bg-white text-gray-800 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
                         >
                           <Eye size={16} />
                           Ver Detalhes

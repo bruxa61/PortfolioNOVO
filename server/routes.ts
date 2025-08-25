@@ -85,7 +85,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Toggle project like
+  // Get project likes count (public)
+  app.get("/api/projects/:id/likes", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const projects = await storage.getProjects();
+      const project = projects.find(p => p.id === id);
+      if (!project) {
+        return res.status(404).json({ message: "Projeto não encontrado" });
+      }
+      res.json({ likesCount: project.likesCount || 0 });
+    } catch (error) {
+      console.error("Error fetching project likes:", error);
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  });
+
+  // Toggle project like (requires login)
   app.post("/api/projects/:id/like", isAuthenticated, async (req: any, res) => {
     try {
       const { id } = req.params;
@@ -238,7 +254,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Achievement likes
+  // Get achievement likes count (public)
+  app.get("/api/achievements/:id/likes", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const achievements = await storage.getAchievements();
+      const achievement = achievements.find(a => a.id === id);
+      if (!achievement) {
+        return res.status(404).json({ message: "Conquista não encontrada" });
+      }
+      res.json({ likesCount: achievement.likesCount || 0 });
+    } catch (error) {
+      console.error("Error fetching achievement likes:", error);
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  });
+
+  // Achievement likes (requires login)
   app.post("/api/achievements/:id/like", isAuthenticated, async (req: any, res) => {
     try {
       const { id } = req.params;
