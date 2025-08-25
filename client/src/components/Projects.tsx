@@ -107,7 +107,7 @@ export default function Projects() {
         ) : projects && projects.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
-              <div key={project.id} className="bg-white rounded-xl shadow-lg hover:shadow-2xl border border-gray-200 transition-all duration-300 fade-in group backdrop-blur-sm">
+              <div key={project.id} className="bg-white rounded-xl shadow-lg hover:shadow-2xl border border-gray-200 transition-all duration-300 group backdrop-blur-sm">
                 <div className="p-6 h-full flex flex-col">
                   <div className="relative overflow-hidden rounded-lg mb-4">
                     <img 
