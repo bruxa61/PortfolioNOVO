@@ -92,9 +92,9 @@ export default function Projects() {
     <section id="projetos" className="py-20 bg-light-gray">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Meus Projetos</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Meus Projetos</h2>
           <div className="w-24 h-1 bg-primary-pink mx-auto rounded-full"></div>
-          <p className="text-gray-700 dark:text-gray-300 mt-4 max-w-2xl mx-auto">
+          <p className="text-gray-700 mt-4 max-w-2xl mx-auto">
             Alguns dos projetos que desenvolvi durante minha jornada de aprendizado
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function Projects() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects?.map((project) => (
-              <div key={project.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl border border-gray-200 dark:border-gray-700 transition-all duration-300 fade-in group backdrop-blur-sm">
+              <div key={project.id} className="bg-white rounded-xl shadow-lg hover:shadow-2xl border border-gray-200 transition-all duration-300 fade-in group backdrop-blur-sm">
                 <div className="p-6 h-full flex flex-col">
                   <div className="relative overflow-hidden rounded-lg mb-4">
                     <img 

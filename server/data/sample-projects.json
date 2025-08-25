@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "title": "E-commerce Completo",
+    "description": "Um projeto de loja virtual com funcionalidades completas de um sistema de e-commerce, desenvolvido com foco em aprendizagem e aplicação de conceitos fundamentais.",
+    "image": "https://via.placeholder.com/400x200/EC4899/ffffff?text=E-commerce",
+    "githubUrl": "https://github.com/bruxa61/APRESENTA-O",
+    "demoUrl": "",
+    "technologies": ["HTML", "CSS", "JavaScript"],
+    "category": "web",
+    "tags": ["frontend", "ecommerce"],
+    "status": "published",
+    "featured": true,
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "updatedAt": "2024-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "2", 
+    "title": "Portfolio com SCSS",
+    "description": "Portfolio desenvolvido utilizando SCSS para estilização avançada e organização de código CSS.",
+    "image": "https://via.placeholder.com/400x200/DB2777/ffffff?text=Portfolio+SCSS",
+    "githubUrl": "https://github.com/bruxa61/SASS",
+    "demoUrl": "",
+    "technologies": ["SCSS", "HTML", "JavaScript"],
+    "category": "web",
+    "tags": ["frontend", "portfolio"],
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-01-20T00:00:00.000Z",
+    "updatedAt": "2024-01-20T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "Sistema de Dermatologia", 
+    "description": "Sistema web para clínica de dermatologia com interface responsiva e design moderno.",
+    "image": "https://via.placeholder.com/400x200/EC4899/ffffff?text=Dermatologia",
+    "githubUrl": "https://github.com/bruxa61/dermatologia",
+    "demoUrl": "",
+    "technologies": ["HTML", "CSS"],
+    "category": "web",
+    "tags": ["frontend", "saude"],
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-02-01T00:00:00.000Z",
+    "updatedAt": "2024-02-01T00:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "title": "Sistema Solar Interativo",
+    "description": "Projeto desenvolvido no curso do Senai que permitiu aplicar conhecimentos junto ao grupo para desenvolver uma representação interativa do sistema solar.",
+    "image": "https://via.placeholder.com/400x200/DB2777/ffffff?text=Sistema+Solar",
+    "githubUrl": "https://github.com/bruxa61/sistema_solar",
+    "demoUrl": "",
+    "technologies": ["HTML", "CSS"],
+    "category": "web",
+    "tags": ["frontend", "educacao"],
+    "status": "published",
+    "featured": false,
+    "createdAt": "2024-02-10T00:00:00.000Z",
+    "updatedAt": "2024-02-10T00:00:00.000Z"
+  }
+]

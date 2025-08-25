@@ -43,7 +43,7 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
   };
 
   return (
-    <Card className="group h-full transition-all duration-300 hover:shadow-2xl hover:shadow-pink-200/50 dark:hover:shadow-pink-900/30 border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg">
+    <Card className="group h-full transition-all duration-300 hover:shadow-2xl hover:shadow-pink-200/50 border-gray-200 bg-white/90 backdrop-blur-sm shadow-lg">
       {achievement.image && (
         <div className="aspect-video overflow-hidden rounded-t-lg">
           <img
@@ -57,15 +57,15 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1">
-            <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <CardTitle className="text-lg font-semibold text-gray-900 mb-2">
               {achievement.title}
             </CardTitle>
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
               <Calendar className="w-4 h-4" />
               {format(new Date(achievement.date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
             </div>
             {achievement.organization && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              <p className="text-sm text-gray-600 mb-2">
                 {achievement.organization}
               </p>
             )}
@@ -78,7 +78,7 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
         <div className="flex items-center gap-2">
           <Badge 
             variant="secondary" 
-            className="bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300"
+            className="bg-pink-100 text-pink-800"
           >
             {achievement.category}
           </Badge>
@@ -86,7 +86,7 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
       </CardHeader>
 
       <CardContent>
-        <p className="text-gray-700 dark:text-gray-300 text-sm mb-4 line-clamp-3">
+        <p className="text-gray-700 text-sm mb-4 line-clamp-3">
           {achievement.description}
         </p>
 
@@ -97,7 +97,7 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
               size="sm"
               onClick={handleLike}
               disabled={!isAuthenticated || isLiking}
-              className="text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400"
+              className="text-gray-600 hover:text-pink-600"
               data-testid={`button-like-achievement-${achievement.id}`}
             >
               <Heart className={`w-4 h-4 mr-1 ${isLiking ? 'animate-pulse' : ''}`} />
@@ -109,7 +109,7 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
               size="sm"
               onClick={() => onComment(achievement.id)}
               disabled={!isAuthenticated}
-              className="text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400"
+              className="text-gray-600 hover:text-pink-600"
               data-testid={`button-comment-achievement-${achievement.id}`}
             >
               <MessageCircle className="w-4 h-4 mr-1" />
@@ -122,7 +122,7 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
               variant="outline"
               size="sm"
               asChild
-              className="border-pink-200 text-pink-600 hover:bg-pink-50 dark:border-pink-700 dark:text-pink-400 dark:hover:bg-pink-900/20"
+              className="border-pink-200 text-pink-600 hover:bg-pink-50"
             >
               <a
                 href={achievement.certificateUrl}
@@ -174,13 +174,13 @@ export default function Achievements() {
 
   if (isLoading) {
     return (
-      <section id="achievements" className="py-20 bg-white dark:bg-gray-900">
+      <section id="achievements" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Conquistas
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               Certificações, prêmios e marcos importantes na minha jornada profissional
             </p>
           </div>
@@ -188,7 +188,7 @@ export default function Achievements() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
               <Card key={i} className="h-64 animate-pulse">
-                <div className="bg-gray-200 dark:bg-gray-700 h-full rounded-lg"></div>
+                <div className="bg-gray-200 h-full rounded-lg"></div>
               </Card>
             ))}
           </div>
@@ -215,7 +215,7 @@ export default function Achievements() {
         {/* Featured Achievements */}
         {featuredAchievements.length > 0 && (
           <div className="mb-12">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+            <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
               <Award className="w-5 h-5 text-yellow-500" />
               Conquistas em Destaque
             </h3>
