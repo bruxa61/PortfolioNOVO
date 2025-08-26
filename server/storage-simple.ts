@@ -166,8 +166,8 @@ export class DatabaseStorage implements IStorage {
         featured: projects.featured,
         createdAt: projects.createdAt,
         updatedAt: projects.updatedAt,
-        likesCount: sql<number>`(SELECT COUNT(*) FROM ${projectLikes} WHERE ${projectLikes.projectId} = ${projects.id})`,
-        commentsCount: sql<number>`(SELECT COUNT(*) FROM ${projectComments} WHERE ${projectComments.projectId} = ${projects.id})`
+        likesCount: sql<number>`CAST((SELECT COUNT(*) FROM ${projectLikes} WHERE ${projectLikes.projectId} = ${projects.id}) AS INTEGER)`,
+        commentsCount: sql<number>`CAST((SELECT COUNT(*) FROM ${projectComments} WHERE ${projectComments.projectId} = ${projects.id}) AS INTEGER)`
       }).from(projects).orderBy(desc(projects.createdAt));
       return result;
     } catch (error) {
@@ -242,8 +242,8 @@ export class DatabaseStorage implements IStorage {
         featured: achievements.featured,
         createdAt: achievements.createdAt,
         updatedAt: achievements.updatedAt,
-        likesCount: sql<number>`(SELECT COUNT(*) FROM ${achievementLikes} WHERE ${achievementLikes.achievementId} = ${achievements.id})`,
-        commentsCount: sql<number>`(SELECT COUNT(*) FROM ${achievementComments} WHERE ${achievementComments.achievementId} = ${achievements.id})`
+        likesCount: sql<number>`CAST((SELECT COUNT(*) FROM ${achievementLikes} WHERE ${achievementLikes.achievementId} = ${achievements.id}) AS INTEGER)`,
+        commentsCount: sql<number>`CAST((SELECT COUNT(*) FROM ${achievementComments} WHERE ${achievementComments.achievementId} = ${achievements.id}) AS INTEGER)`
       }).from(achievements).orderBy(desc(achievements.createdAt));
       return result;
     } catch (error) {
