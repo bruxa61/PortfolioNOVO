@@ -237,17 +237,32 @@ export default function Navigation() {
             <div className="border-t border-gray-100 pt-3 mt-3">
               {isAuthenticated ? (
                 <div className="space-y-2">
-                  <div className="flex items-center px-3 py-2">
-                    {user?.profileImageUrl && (
-                      <img 
-                        src={user.profileImageUrl} 
-                        alt={user.firstName || 'User'} 
-                        className="w-6 h-6 rounded-full border border-primary-pink mr-3"
-                      />
-                    )}
-                    <span className="text-sm text-gray-600">
-                      {user?.firstName || user?.email}
-                    </span>
+                  <div className="flex items-center justify-between px-3 py-2">
+                    <div className="flex items-center">
+                      {user?.profileImageUrl ? (
+                        <img 
+                          src={user.profileImageUrl} 
+                          alt={user.firstName || 'User'} 
+                          className="w-6 h-6 rounded-full border border-primary-pink mr-3"
+                        />
+                      ) : (
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center mr-3">
+                          <User className="h-3 w-3 text-white" />
+                        </div>
+                      )}
+                      <span className="text-sm text-gray-600">
+                        {user?.firstName || user?.email}
+                      </span>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => setIsProfileDialogOpen(true)}
+                      className="p-1 h-auto"
+                      data-testid="button-edit-profile-mobile"
+                    >
+                      <Settings size={14} className="text-gray-400" />
+                    </Button>
                   </div>
                   {isAdmin && (
                     <button

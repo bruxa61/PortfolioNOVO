@@ -1,10 +1,10 @@
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle, ExternalLink, Award, Calendar } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { apiRequest } from "@/lib/queryClient";
@@ -31,7 +31,7 @@ interface AchievementCardProps {
   isAuthenticated: boolean;
 }
 
-function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: AchievementCardProps) {
+function AchievementCard({ achievement, onLike, onComment, isAuthenticated, isLiked }: AchievementCardProps & { isLiked: boolean }) {
   const [isLiking, setIsLiking] = useState(false);
 
   const handleLike = async () => {
@@ -99,10 +99,14 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
               size="sm"
               onClick={handleLike}
               disabled={!isAuthenticated || isLiking}
-              className="text-gray-600 hover:text-pink-600"
+              className={`transition-colors ${
+                isLiked 
+                  ? "text-red-600 hover:text-red-700" 
+                  : "text-gray-600 hover:text-pink-600"
+              }`}
               data-testid={`button-like-achievement-${achievement.id}`}
             >
-              <Heart className={`w-4 h-4 mr-1 ${isLiking ? 'animate-pulse' : ''}`} />
+              <Heart className={`w-4 h-4 mr-1 ${isLiking ? 'animate-pulse' : ''} ${isLiked ? 'fill-current' : ''}`} />
               {achievement.likesCount}
             </Button>
             
@@ -148,10 +152,24 @@ export default function Achievements() {
   const isAuthenticated = !!user;
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [likedAchievements, setLikedAchievements] = useState<Set<string>>(new Set());
   
   const { data: achievements = [], isLoading } = useQuery<Achievement[]>({
     queryKey: ["/api/achievements"],
   });
+
+  // Load user's liked achievements on component mount
+  const { data: userAchievementLikes } = useQuery<{ achievementId: string }[]>({
+    queryKey: ["/api/user/achievement-likes"],
+    enabled: isAuthenticated,
+  });
+
+  // Initialize liked achievements from user data
+  useEffect(() => {
+    if (userAchievementLikes && userAchievementLikes.length > 0) {
+      setLikedAchievements(new Set(userAchievementLikes.map(like => like.achievementId)));
+    }
+  }, [userAchievementLikes]);
 
   const toggleLikeMutation = useMutation({
     mutationFn: async (achievementId: string) => {
@@ -159,6 +177,15 @@ export default function Achievements() {
       return response.json();
     },
     onSuccess: (data, achievementId) => {
+      if (data.liked) {
+        setLikedAchievements(prev => new Set(Array.from(prev).concat(achievementId)));
+      } else {
+        setLikedAchievements(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(achievementId);
+          return newSet;
+        });
+      }
       queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
       toast({
         title: data.liked ? "Conquista curtida!" : "Curtida removida",
@@ -246,6 +273,7 @@ export default function Achievements() {
                   onLike={handleLike}
                   onComment={handleComment}
                   isAuthenticated={isAuthenticated}
+                  isLiked={likedAchievements.has(achievement.id)}
                 />
               ))}
             </div>
@@ -268,6 +296,7 @@ export default function Achievements() {
                   onLike={handleLike}
                   onComment={handleComment}
                   isAuthenticated={isAuthenticated}
+                  isLiked={likedAchievements.has(achievement.id)}
                 />
               ))}
             </div>

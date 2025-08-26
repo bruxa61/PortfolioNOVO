@@ -1,5 +1,6 @@
-import { DatabaseStorage, MemStorage } from "./storage-simple";
+import { DatabaseStorage } from "./storage-simple";
 import { type User, type Project, type Achievement, type Contact } from "@shared/schema";
+import crypto from "crypto";
 
 /**
  * Hybrid storage that tries database first, falls back to memory
@@ -7,33 +8,38 @@ import { type User, type Project, type Achievement, type Contact } from "@shared
  */
 export class HybridStorage {
   private dbStorage: DatabaseStorage;
-  private memStorage: MemStorage;
   private useMemory: boolean = false;
 
   constructor() {
     this.dbStorage = new DatabaseStorage();
-    this.memStorage = new MemStorage();
   }
 
-  private async safeDbOperation<T>(operation: () => Promise<T>, fallbackOperation: () => Promise<T>): Promise<T> {
+  private async safeDbOperation<T>(operation: () => Promise<T>, fallbackValue: T): Promise<T> {
     if (this.useMemory) {
-      return fallbackOperation();
+      return fallbackValue;
     }
 
     try {
       const result = await operation();
       return result;
     } catch (error) {
-      console.warn("Database operation failed, switching to memory storage permanently:", error);
+      console.warn("Database operation failed, using fallback:", error);
       this.useMemory = true;
-      return fallbackOperation();
+      return fallbackValue;
     }
   }
 
   async createUser(userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+    const fallbackUser = {
+      id: crypto.randomUUID(),
+      ...userData,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as User;
+    
     return this.safeDbOperation(
       () => this.dbStorage.createUser(userData),
-      () => this.memStorage.createUser(userData)
+      fallbackUser
     );
   }
 

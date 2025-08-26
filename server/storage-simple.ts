@@ -26,6 +26,8 @@ export interface IStorage {
   deleteExperience(id: string): Promise<void>;
   toggleProjectLike(projectId: string, userId: string): Promise<boolean>;
   toggleAchievementLike(achievementId: string, userId: string): Promise<boolean>;
+  getUserLikes(userId: string): Promise<{ projectId: string }[]>;
+  getUserAchievementLikes(userId: string): Promise<{ achievementId: string }[]>;
   getProjectComments(projectId: string): Promise<any[]>;
   addProjectComment(comment: any): Promise<ProjectComment>;
   getAchievementComments(achievementId: string): Promise<any[]>;
@@ -525,6 +527,32 @@ export class DatabaseStorage implements IStorage {
         .where(eq(notifications.id, id));
     } catch (error) {
       console.error("Database error in markNotificationRead:", error);
+    }
+  }
+
+  async getUserLikes(userId: string): Promise<{ projectId: string }[]> {
+    if (!db) return [];
+    try {
+      return await db.select({
+        projectId: projectLikes.projectId
+      }).from(projectLikes)
+        .where(eq(projectLikes.userId, userId));
+    } catch (error) {
+      console.error("Database error in getUserLikes:", error);
+      return [];
+    }
+  }
+
+  async getUserAchievementLikes(userId: string): Promise<{ achievementId: string }[]> {
+    if (!db) return [];
+    try {
+      return await db.select({
+        achievementId: achievementLikes.achievementId
+      }).from(achievementLikes)
+        .where(eq(achievementLikes.userId, userId));
+    } catch (error) {
+      console.error("Database error in getUserAchievementLikes:", error);
+      return [];
     }
   }
 }

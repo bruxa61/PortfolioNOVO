@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
@@ -22,6 +22,19 @@ export default function Projects() {
   const { data: projects, isLoading, error } = useQuery<ProjectWithStats[]>({
     queryKey: ["/api/projects"],
   });
+
+  // Load user's liked projects on component mount
+  const { data: userLikes } = useQuery<{ projectId: string }[]>({
+    queryKey: ["/api/user/likes"],
+    enabled: isAuthenticated,
+  });
+
+  // Initialize liked projects from user data
+  useEffect(() => {
+    if (userLikes && userLikes.length > 0) {
+      setLikedProjects(new Set(userLikes.map(like => like.projectId)));
+    }
+  }, [userLikes]);
 
 
   const toggleLikeMutation = useMutation({
@@ -192,7 +205,7 @@ export default function Projects() {
                               handleToggleLike(project.id);
                             }}
                             className={`p-2 rounded-full transition-colors ${
-                              likedProjects.has(project.id) || project.userLiked
+                              likedProjects.has(project.id)
                                 ? "bg-red-100 text-red-600 hover:bg-red-200"
                                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                             }`}
@@ -200,7 +213,7 @@ export default function Projects() {
                           >
                             <Heart 
                               size={16} 
-                              className={(likedProjects.has(project.id) || project.userLiked) ? "fill-current" : ""} 
+                              className={likedProjects.has(project.id) ? "fill-current" : ""} 
                             />
                           </button>
                           
@@ -236,7 +249,7 @@ export default function Projects() {
             project={selectedProject}
             isOpen={!!selectedProject}
             onClose={() => setSelectedProject(null)}
-            liked={likedProjects.has(selectedProject.id) || selectedProject.userLiked || false}
+            liked={likedProjects.has(selectedProject.id)}
             onToggleLike={() => handleToggleLike(selectedProject.id)}
           />
         )}

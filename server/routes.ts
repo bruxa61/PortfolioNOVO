@@ -114,6 +114,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get user's liked projects (requires login)
+  app.get("/api/user/likes", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const likes = await storage.getUserLikes(userId);
+      res.json(likes);
+    } catch (error) {
+      console.error("Error fetching user likes:", error);
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  });
+
   // Get project comments
   app.get("/api/projects/:id/comments", async (req, res) => {
     try {
@@ -289,6 +301,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ liked });
     } catch (error) {
       console.error("Error toggling achievement like:", error);
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  });
+
+  // Get user's liked achievements (requires login)
+  app.get("/api/user/achievement-likes", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const likes = await storage.getUserAchievementLikes(userId);
+      res.json(likes);
+    } catch (error) {
+      console.error("Error fetching user achievement likes:", error);
       res.status(500).json({ message: "Erro interno do servidor" });
     }
   });
