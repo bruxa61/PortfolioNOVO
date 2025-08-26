@@ -150,8 +150,24 @@ export class DatabaseStorage implements IStorage {
   async getProjects(): Promise<any[]> {
     if (!db) return [];
     try {
-      const result = await db.select().from(projects).orderBy(desc(projects.createdAt));
-      return result.map(p => ({ ...p, likesCount: 0, commentsCount: 0 }));
+      const result = await db.select({
+        id: projects.id,
+        title: projects.title,
+        description: projects.description,
+        image: projects.image,
+        githubUrl: projects.githubUrl,
+        demoUrl: projects.demoUrl,
+        technologies: projects.technologies,
+        category: projects.category,
+        tags: projects.tags,
+        status: projects.status,
+        featured: projects.featured,
+        createdAt: projects.createdAt,
+        updatedAt: projects.updatedAt,
+        likesCount: sql<number>`(SELECT COUNT(*) FROM ${projectLikes} WHERE ${projectLikes.projectId} = ${projects.id})`,
+        commentsCount: sql<number>`(SELECT COUNT(*) FROM ${projectComments} WHERE ${projectComments.projectId} = ${projects.id})`
+      }).from(projects).orderBy(desc(projects.createdAt));
+      return result;
     } catch (error) {
       console.error("Database error in getProjects:", error);
       return [];
@@ -211,8 +227,23 @@ export class DatabaseStorage implements IStorage {
   async getAchievements(): Promise<any[]> {
     if (!db) return [];
     try {
-      const result = await db.select().from(achievements).orderBy(desc(achievements.createdAt));
-      return result.map(a => ({ ...a, likesCount: 0, commentsCount: 0 }));
+      const result = await db.select({
+        id: achievements.id,
+        title: achievements.title,
+        description: achievements.description,
+        image: achievements.image,
+        date: achievements.date,
+        category: achievements.category,
+        certificateUrl: achievements.certificateUrl,
+        organization: achievements.organization,
+        status: achievements.status,
+        featured: achievements.featured,
+        createdAt: achievements.createdAt,
+        updatedAt: achievements.updatedAt,
+        likesCount: sql<number>`(SELECT COUNT(*) FROM ${achievementLikes} WHERE ${achievementLikes.achievementId} = ${achievements.id})`,
+        commentsCount: sql<number>`(SELECT COUNT(*) FROM ${achievementComments} WHERE ${achievementComments.achievementId} = ${achievements.id})`
+      }).from(achievements).orderBy(desc(achievements.createdAt));
+      return result;
     } catch (error) {
       console.error("Database error in getAchievements:", error);
       return [];

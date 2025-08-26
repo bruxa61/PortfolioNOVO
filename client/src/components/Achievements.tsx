@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface Achievement {
   id: string;
@@ -144,27 +146,44 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated }: Ac
 export default function Achievements() {
   const { user } = useAuth();
   const isAuthenticated = !!user;
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   
   const { data: achievements = [], isLoading } = useQuery<Achievement[]>({
     queryKey: ["/api/achievements"],
   });
 
-  const handleLike = async (achievementId: string) => {
-    if (!isAuthenticated) return;
-    
-    try {
-      const response = await fetch(`/api/achievements/${achievementId}/like`, {
-        method: 'POST',
-        credentials: 'include',
+  const toggleLikeMutation = useMutation({
+    mutationFn: async (achievementId: string) => {
+      const response = await apiRequest("POST", `/api/achievements/${achievementId}/like`);
+      return response.json();
+    },
+    onSuccess: (data, achievementId) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
+      toast({
+        title: data.liked ? "Conquista curtida!" : "Curtida removida",
+        description: data.liked ? "Você curtiu esta conquista." : "Você removeu a curtida.",
       });
-      
-      if (response.ok) {
-        // Invalidate and refetch achievements to update like count
-        window.location.reload(); // Simple approach for now
-      }
-    } catch (error) {
-      console.error('Error liking achievement:', error);
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro ao curtir",
+        description: "Não foi possível curtir a conquista. Tente novamente.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleLike = (achievementId: string) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Login necessário",
+        description: "Faça login para curtir as conquistas.",
+        variant: "destructive",
+      });
+      return;
     }
+    toggleLikeMutation.mutate(achievementId);
   };
 
   const handleComment = (achievementId: string) => {

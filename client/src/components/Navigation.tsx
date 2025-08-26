@@ -292,7 +292,7 @@ export default function Navigation() {
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="profile-image">Foto de Perfil</Label>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <Input
                   id="profile-image-file"
                   type="file"
@@ -300,9 +300,43 @@ export default function Navigation() {
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
+                      // Compress and resize image before uploading
+                      const canvas = document.createElement('canvas');
+                      const ctx = canvas.getContext('2d');
+                      const img = new Image();
+                      
+                      img.onload = () => {
+                        // Set max dimensions
+                        const maxWidth = 400;
+                        const maxHeight = 400;
+                        
+                        let { width, height } = img;
+                        
+                        // Calculate new dimensions while maintaining aspect ratio
+                        if (width > height) {
+                          if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                          }
+                        } else {
+                          if (height > maxHeight) {
+                            width = (width * maxHeight) / height;
+                            height = maxHeight;
+                          }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        // Draw and compress
+                        ctx?.drawImage(img, 0, 0, width, height);
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        setProfileImageUrl(compressedDataUrl);
+                      };
+                      
                       const reader = new FileReader();
                       reader.onload = () => {
-                        setProfileImageUrl(reader.result as string);
+                        img.src = reader.result as string;
                       };
                       reader.readAsDataURL(file);
                     }
@@ -315,6 +349,7 @@ export default function Navigation() {
                   variant="outline" 
                   size="sm"
                   onClick={() => document.getElementById('profile-image-file')?.click()}
+                  className="w-full sm:w-auto"
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   Escolher Arquivo
@@ -326,7 +361,7 @@ export default function Navigation() {
                 placeholder="Ou cole a URL da imagem"
                 data-testid="input-profile-image-url"
               />
-              <p className="text-sm text-gray-500">Escolha um arquivo ou cole uma URL de imagem</p>
+              <p className="text-sm text-gray-500">Escolha um arquivo ou cole uma URL de imagem. As imagens serão automaticamente redimensionadas.</p>
             </div>
             
             {/* Preview */}
