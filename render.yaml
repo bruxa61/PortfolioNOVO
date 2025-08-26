@@ -14,19 +14,7 @@ services:
           property: connectionString
       - key: SESSION_SECRET
         generateValue: true
-    headers:
-      - path: /*
-        name: Strict-Transport-Security
-        value: max-age=31536000; includeSubDomains
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-      - path: /*
-        name: X-Frame-Options
-        value: DENY
-      - path: /*
-        name: Referrer-Policy
-        value: strict-origin-when-cross-origin
+    # Headers configurados no servidor Express para compatibilidade total
 
 databases:
   - name: portfolio-db

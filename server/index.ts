@@ -5,6 +5,31 @@ import { initializeDatabase } from "./init-db";
 import { checkEnvironment } from "./env-check";
 
 const app = express();
+
+// Security headers for HTTPS and privacy protection
+app.use((req, res, next) => {
+  // Force HTTPS in production
+  if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !== 'https') {
+    res.redirect(301, `https://${req.header('host')}${req.url}`);
+    return;
+  }
+  
+  // Security headers
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https: wss: ws:; img-src 'self' data: https: blob:; font-src 'self' data: https:;");
+  
+  next();
+});
+
+// Trust proxy for Render deployment
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Increase the limit for JSON and URL-encoded bodies to handle large images
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));

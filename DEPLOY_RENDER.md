@@ -51,22 +51,42 @@ databases:
 - Estado das curtidas sincronizado entre frontend e backend
 
 #### ✅ Headers de Segurança HTTPS
-- Adicionado Strict-Transport-Security para forçar HTTPS
-- Headers de segurança para resolver problemas de privacidade
-- Configuração adequada para produção no Render
+- Headers de segurança configurados no servidor Express
+- Redirecionamento automático para HTTPS em produção
+- Trust proxy configurado para Render
+- Content Security Policy para máxima segurança
+- Configuração completa para resolver "sua ligação não é privada"
 
 #### ✅ Compatibilidade Render + Replit
 - Código funciona em ambos os ambientes
 - Detecção automática de ambiente (development/production)
 - Configuração de porta dinâmica
 
-### 3. Próximos Passos para Deploy
+### 3. Solução para "Sua ligação não é privada"
 
-1. **Commit e Push das alterações**
-2. **Conectar repositório ao Render**
-3. **Configurar service usando render.yaml**
-4. **Verificar se DATABASE_URL está configurada**
-5. **Testar funcionalidades após deploy**
+#### Implementações no Servidor Express:
+1. **Redirecionamento forçado para HTTPS** em produção
+2. **Trust proxy** configurado para o Render
+3. **Headers de segurança** completos:
+   - Strict-Transport-Security com preload
+   - X-Content-Type-Options: nosniff
+   - X-Frame-Options: DENY
+   - Content-Security-Policy abrangente
+   - X-XSS-Protection ativado
+
+#### Como resolver no navegador:
+1. **Limpar cache do navegador**
+2. **Tentar em modo incógnito**
+3. **Aguardar propagação do certificado SSL** (pode levar alguns minutos)
+4. **Verificar se o deploy foi concluído** completamente no Render
+
+### 4. Próximos Passos para Deploy
+
+1. **Fazer novo deploy no Render** com as correções
+2. **Aguardar conclusão** do build e certificado SSL
+3. **Limpar cache do navegador**
+4. **Testar em modo incógnito**
+5. **Verificar funcionalidades** após acesso
 
 ### 4. Funcionalidades Testadas
 - ✅ Sistema de autenticação
