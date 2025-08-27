@@ -187,14 +187,14 @@ export default function Projects() {
                       
                       {/* Stats and Actions */}
                       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                        <div className="flex items-center space-x-4 text-sm text-gray-500">
-                          <span className="flex items-center space-x-1">
-                            <Heart size={14} />
-                            <span>{project.likesCount || 0}</span>
+                        <div className="flex items-center space-x-4 text-sm text-gray-600">
+                          <span className="flex items-center space-x-1 font-medium">
+                            <Heart size={16} className="text-red-500" />
+                            <span>{project.likesCount || 0} curtidas</span>
                           </span>
-                          <span className="flex items-center space-x-1">
-                            <MessageCircle size={14} />
-                            <span>{project.commentsCount || 0}</span>
+                          <span className="flex items-center space-x-1 font-medium">
+                            <MessageCircle size={16} className="text-blue-500" />
+                            <span>{project.commentsCount || 0} comentários</span>
                           </span>
                         </div>
                         

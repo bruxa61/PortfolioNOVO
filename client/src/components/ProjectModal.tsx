@@ -19,7 +19,8 @@ interface ProjectModalProps {
 }
 
 export default function ProjectModal({ project, isOpen, onClose, liked, onToggleLike }: ProjectModalProps) {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
+  const isAuthenticated = !!user;
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [commentContent, setCommentContent] = useState("");
