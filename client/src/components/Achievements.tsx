@@ -1,36 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Heart, MessageCircle, ExternalLink, Award, Calendar } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
+import { ExternalLink, Award, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import AchievementModal from "./AchievementModal";
 import type { AchievementWithStats } from "@shared/schema";
 
 interface AchievementCardProps {
   achievement: AchievementWithStats;
-  onLike: (id: string) => void;
-  onComment: (id: string) => void;
-  isAuthenticated: boolean;
 }
 
-function AchievementCard({ achievement, onLike, onComment, isAuthenticated, isLiked }: AchievementCardProps & { isLiked: boolean }) {
-  const [isLiking, setIsLiking] = useState(false);
-
-  const handleLike = async () => {
-    if (!isAuthenticated || isLiking) return;
-    setIsLiking(true);
-    try {
-      await onLike(achievement.id);
-    } finally {
-      setIsLiking(false);
-    }
-  };
+function AchievementCard({ achievement }: AchievementCardProps) {
 
   return (
     <Card className="group h-full transition-all duration-300 hover:shadow-2xl hover:shadow-pink-200/50 border-gray-200 bg-white/90 backdrop-blur-sm shadow-lg">
@@ -80,37 +62,7 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated, isLi
           {achievement.description}
         </p>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleLike}
-              disabled={!isAuthenticated || isLiking}
-              className={`transition-colors ${
-                isLiked 
-                  ? "text-red-600 hover:text-red-700" 
-                  : "text-gray-600 hover:text-pink-600"
-              }`}
-              data-testid={`button-like-achievement-${achievement.id}`}
-            >
-              <Heart className={`w-4 h-4 mr-1 ${isLiking ? 'animate-pulse' : ''} ${isLiked ? 'fill-current' : ''}`} />
-              {achievement.likesCount}
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onComment(achievement.id)}
-              disabled={!isAuthenticated}
-              className="text-gray-600 hover:text-pink-600"
-              data-testid={`button-comment-achievement-${achievement.id}`}
-            >
-              <MessageCircle className="w-4 h-4 mr-1" />
-              {achievement.commentsCount}
-            </Button>
-          </div>
-
+        <div className="flex justify-end">
           {achievement.certificateUrl && (
             <Button
               variant="outline"
@@ -136,84 +88,9 @@ function AchievementCard({ achievement, onLike, onComment, isAuthenticated, isLi
 }
 
 export default function Achievements() {
-  const { user } = useAuth();
-  const isAuthenticated = !!user;
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [likedAchievements, setLikedAchievements] = useState<Set<string>>(new Set());
-  const [selectedAchievement, setSelectedAchievement] = useState<AchievementWithStats | null>(null);
-  
   const { data: achievements = [], isLoading } = useQuery<AchievementWithStats[]>({
     queryKey: ["/api/achievements"],
-    staleTime: 0, // Always consider data stale to force updates
-    refetchOnWindowFocus: true,
   });
-
-  // Load user's liked achievements on component mount
-  const { data: userAchievementLikes } = useQuery<{ achievementId: string }[]>({
-    queryKey: ["/api/user/achievement-likes"],
-    enabled: isAuthenticated,
-  });
-
-  // Initialize liked achievements from user data
-  useEffect(() => {
-    if (userAchievementLikes && userAchievementLikes.length > 0) {
-      setLikedAchievements(new Set(userAchievementLikes.map(like => like.achievementId)));
-    }
-  }, [userAchievementLikes]);
-
-  const toggleLikeMutation = useMutation({
-    mutationFn: async (achievementId: string) => {
-      const response = await apiRequest("POST", `/api/achievements/${achievementId}/like`);
-      return response.json();
-    },
-    onSuccess: (data, achievementId) => {
-      if (data.liked) {
-        setLikedAchievements(prev => new Set(Array.from(prev).concat(achievementId)));
-      } else {
-        setLikedAchievements(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(achievementId);
-          return newSet;
-        });
-      }
-      // Force refetch to ensure counters are updated
-      queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
-      queryClient.refetchQueries({ queryKey: ["/api/achievements"] });
-      toast({
-        title: data.liked ? "Conquista curtida!" : "Curtida removida",
-        description: data.liked ? "Você curtiu esta conquista." : "Você removeu a curtida.",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Erro ao curtir",
-        description: "Não foi possível curtir a conquista. Tente novamente.",
-        variant: "destructive",
-      });
-    },
-  });
-
-
-
-  const handleComment = (achievementId: string) => {
-    const achievement = achievements.find(a => a.id === achievementId);
-    if (achievement) {
-      setSelectedAchievement(achievement);
-    }
-  };
-
-  const handleToggleLike = (achievementId: string) => {
-    if (!isAuthenticated) {
-      toast({
-        title: "Login necessário",
-        description: "Faça login para curtir as conquistas.",
-        variant: "destructive",
-      });
-      return;
-    }
-    toggleLikeMutation.mutate(achievementId);
-  };
 
   if (isLoading) {
     return (
@@ -267,10 +144,6 @@ export default function Achievements() {
                 <AchievementCard
                   key={achievement.id}
                   achievement={achievement}
-                  onLike={handleToggleLike}
-                  onComment={handleComment}
-                  isAuthenticated={isAuthenticated}
-                  isLiked={likedAchievements.has(achievement.id)}
                 />
               ))}
             </div>
@@ -290,10 +163,6 @@ export default function Achievements() {
                 <AchievementCard
                   key={achievement.id}
                   achievement={achievement}
-                  onLike={handleToggleLike}
-                  onComment={handleComment}
-                  isAuthenticated={isAuthenticated}
-                  isLiked={likedAchievements.has(achievement.id)}
                 />
               ))}
             </div>
@@ -309,16 +178,7 @@ export default function Achievements() {
           </div>
         )}
 
-        {/* Achievement Modal */}
-        {selectedAchievement && (
-          <AchievementModal
-            achievement={selectedAchievement}
-            isOpen={!!selectedAchievement}
-            onClose={() => setSelectedAchievement(null)}
-            liked={likedAchievements.has(selectedAchievement.id)}
-            onToggleLike={() => handleToggleLike(selectedAchievement.id)}
-          />
-        )}
+
       </div>
     </section>
   );
