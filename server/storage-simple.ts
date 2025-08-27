@@ -152,24 +152,33 @@ export class DatabaseStorage implements IStorage {
   async getProjects(): Promise<any[]> {
     if (!db) return [];
     try {
-      const result = await db.select({
-        id: projects.id,
-        title: projects.title,
-        description: projects.description,
-        image: projects.image,
-        githubUrl: projects.githubUrl,
-        demoUrl: projects.demoUrl,
-        technologies: projects.technologies,
-        category: projects.category,
-        tags: projects.tags,
-        status: projects.status,
-        featured: projects.featured,
-        createdAt: projects.createdAt,
-        updatedAt: projects.updatedAt,
-        likesCount: sql<number>`CAST((SELECT COUNT(*) FROM ${projectLikes} WHERE ${projectLikes.projectId} = ${projects.id}) AS INTEGER)`,
-        commentsCount: sql<number>`CAST((SELECT COUNT(*) FROM ${projectComments} WHERE ${projectComments.projectId} = ${projects.id}) AS INTEGER)`
-      }).from(projects).orderBy(desc(projects.createdAt));
-      return result;
+      // Get basic projects first
+      const basicProjects = await db.select().from(projects).orderBy(desc(projects.createdAt));
+      
+      // Get counts for each project
+      const projectsWithCounts = [];
+      for (const project of basicProjects) {
+        // Count likes
+        const likesCountQuery = await db.select({ count: sql<number>`COUNT(*)` })
+          .from(projectLikes)
+          .where(eq(projectLikes.projectId, project.id));
+        
+        // Count comments  
+        const commentsCountQuery = await db.select({ count: sql<number>`COUNT(*)` })
+          .from(projectComments)
+          .where(eq(projectComments.projectId, project.id));
+          
+        const likesCount = Number(likesCountQuery[0]?.count || 0);
+        const commentsCount = Number(commentsCountQuery[0]?.count || 0);
+        
+        projectsWithCounts.push({
+          ...project,
+          likesCount,
+          commentsCount
+        });
+      }
+      
+      return projectsWithCounts;
     } catch (error) {
       console.error("Database error in getProjects:", error);
       return [];
