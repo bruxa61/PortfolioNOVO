@@ -55,8 +55,10 @@ export default function AchievementModal({ achievement, isOpen, onClose, liked, 
         title: "Comentário adicionado!",
         description: "Seu comentário foi publicado com sucesso.",
       });
+      // Force refetch both the comments and the achievements list to update counters
       queryClient.invalidateQueries({ queryKey: ["/api/achievements", achievement.id, "comments"] });
       queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
+      queryClient.refetchQueries({ queryKey: ["/api/achievements"] });
       setCommentContent("");
     },
     onError: (error) => {

@@ -40,7 +40,10 @@ export default function ProjectModal({ project, isOpen, onClose, liked, onToggle
         title: "Comentário adicionado!",
         description: "Seu comentário foi publicado com sucesso.",
       });
+      // Force refetch both the comments and the projects list to update counters
       queryClient.invalidateQueries({ queryKey: ["/api/projects", project.id, "comments"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
+      queryClient.refetchQueries({ queryKey: ["/api/projects"] });
       setCommentContent("");
     },
     onError: (error) => {

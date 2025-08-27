@@ -145,6 +145,8 @@ export default function Achievements() {
   
   const { data: achievements = [], isLoading } = useQuery<AchievementWithStats[]>({
     queryKey: ["/api/achievements"],
+    staleTime: 0, // Always consider data stale to force updates
+    refetchOnWindowFocus: true,
   });
 
   // Load user's liked achievements on component mount
@@ -175,7 +177,9 @@ export default function Achievements() {
           return newSet;
         });
       }
+      // Force refetch to ensure counters are updated
       queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
+      queryClient.refetchQueries({ queryKey: ["/api/achievements"] });
       toast({
         title: data.liked ? "Conquista curtida!" : "Curtida removida",
         description: data.liked ? "Você curtiu esta conquista." : "Você removeu a curtida.",

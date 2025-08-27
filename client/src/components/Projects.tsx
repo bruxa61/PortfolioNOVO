@@ -21,6 +21,8 @@ export default function Projects() {
 
   const { data: projects, isLoading, error } = useQuery<ProjectWithStats[]>({
     queryKey: ["/api/projects"],
+    staleTime: 0, // Always consider data stale to force updates
+    refetchOnWindowFocus: true,
   });
 
   // Load user's liked projects on component mount
@@ -52,7 +54,9 @@ export default function Projects() {
           return newSet;
         });
       }
+      // Force refetch to ensure counters are updated
       queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
+      queryClient.refetchQueries({ queryKey: ["/api/projects"] });
       toast({
         title: data.liked ? "Projeto curtido!" : "Curtida removida",
         description: data.liked ? "Você curtiu este projeto." : "Você removeu a curtida.",
