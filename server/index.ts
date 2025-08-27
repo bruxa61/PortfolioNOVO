@@ -8,11 +8,11 @@ const app = express();
 
 // Security headers for HTTPS and privacy protection
 app.use((req, res, next) => {
-  // Force HTTPS in production
-  if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !== 'https') {
-    res.redirect(301, `https://${req.header('host')}${req.url}`);
-    return;
-  }
+  // Force HTTPS in production (disabled for debugging)
+  // if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !== 'https') {
+  //   res.redirect(301, `https://${req.header('host')}${req.url}`);
+  //   return;
+  // }
   
   // Security headers
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
