@@ -9,23 +9,11 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-
-interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  image?: string | null;
-  date: string;
-  category: string;
-  certificateUrl?: string | null;
-  organization?: string | null;
-  featured: boolean;
-  likesCount: number;
-  commentsCount: number;
-}
+import AchievementModal from "./AchievementModal";
+import type { AchievementWithStats } from "@shared/schema";
 
 interface AchievementCardProps {
-  achievement: Achievement;
+  achievement: AchievementWithStats;
   onLike: (id: string) => void;
   onComment: (id: string) => void;
   isAuthenticated: boolean;
@@ -153,8 +141,9 @@ export default function Achievements() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [likedAchievements, setLikedAchievements] = useState<Set<string>>(new Set());
+  const [selectedAchievement, setSelectedAchievement] = useState<AchievementWithStats | null>(null);
   
-  const { data: achievements = [], isLoading } = useQuery<Achievement[]>({
+  const { data: achievements = [], isLoading } = useQuery<AchievementWithStats[]>({
     queryKey: ["/api/achievements"],
   });
 
@@ -201,7 +190,16 @@ export default function Achievements() {
     },
   });
 
-  const handleLike = (achievementId: string) => {
+
+
+  const handleComment = (achievementId: string) => {
+    const achievement = achievements.find(a => a.id === achievementId);
+    if (achievement) {
+      setSelectedAchievement(achievement);
+    }
+  };
+
+  const handleToggleLike = (achievementId: string) => {
     if (!isAuthenticated) {
       toast({
         title: "Login necessário",
@@ -211,11 +209,6 @@ export default function Achievements() {
       return;
     }
     toggleLikeMutation.mutate(achievementId);
-  };
-
-  const handleComment = (achievementId: string) => {
-    // TODO: Open comment modal/form
-    console.log('Comment on achievement:', achievementId);
   };
 
   if (isLoading) {
@@ -270,7 +263,7 @@ export default function Achievements() {
                 <AchievementCard
                   key={achievement.id}
                   achievement={achievement}
-                  onLike={handleLike}
+                  onLike={handleToggleLike}
                   onComment={handleComment}
                   isAuthenticated={isAuthenticated}
                   isLiked={likedAchievements.has(achievement.id)}
@@ -293,7 +286,7 @@ export default function Achievements() {
                 <AchievementCard
                   key={achievement.id}
                   achievement={achievement}
-                  onLike={handleLike}
+                  onLike={handleToggleLike}
                   onComment={handleComment}
                   isAuthenticated={isAuthenticated}
                   isLiked={likedAchievements.has(achievement.id)}
@@ -310,6 +303,17 @@ export default function Achievements() {
               Nenhuma conquista encontrada.
             </p>
           </div>
+        )}
+
+        {/* Achievement Modal */}
+        {selectedAchievement && (
+          <AchievementModal
+            achievement={selectedAchievement}
+            isOpen={!!selectedAchievement}
+            onClose={() => setSelectedAchievement(null)}
+            liked={likedAchievements.has(selectedAchievement.id)}
+            onToggleLike={() => handleToggleLike(selectedAchievement.id)}
+          />
         )}
       </div>
     </section>
