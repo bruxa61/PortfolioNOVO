@@ -1,0 +1,46 @@
+{
+  "achievements": [
+    {
+      "id": "1",
+      "title": "Cisco",
+      "description": "Certificações pela Cisco",
+      "image": null,
+      "date": "2024-06-20",
+      "category": "certificado",
+      "certificateUrl": "#",
+      "organization": "Cisco",
+      "status": "active",
+      "featured": false,
+      "createdAt": "2024-06-20T00:00:00.000Z",
+      "updatedAt": "2024-06-20T00:00:00.000Z"
+    },
+    {
+      "id": "2", 
+      "title": "SENAI",
+      "description": "Certificações pelo SENAI",
+      "image": null,
+      "date": "2025-08-24",
+      "category": "certificado",
+      "certificateUrl": "#",
+      "organization": "SENAI", 
+      "status": "active",
+      "featured": false,
+      "createdAt": "2025-08-24T00:00:00.000Z",
+      "updatedAt": "2025-08-24T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "title": "AWS Academy Cloud Foundations",
+      "description": "O certificado comprova meu entendimento geral detalhado de conceitos de nuvem, produtos essenciais da AWS, segurança, arquitetura, preços e suporte.",
+      "image": null,
+      "date": "2024-03-08",
+      "category": "certificado",
+      "certificateUrl": "#",
+      "organization": "AWS Academy Graduate",
+      "status": "active",
+      "featured": true,
+      "createdAt": "2024-03-08T00:00:00.000Z",
+      "updatedAt": "2024-03-08T00:00:00.000Z"
+    }
+  ]
+}

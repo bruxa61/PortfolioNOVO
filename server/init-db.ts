@@ -190,38 +190,75 @@ async function loadSampleData(pool: pg.Pool) {
     const projectsResult = await pool.query('SELECT COUNT(*) FROM projects');
     const projectCount = parseInt(projectsResult.rows[0].count);
     
-    if (projectCount > 0) {
+    const achievementsResult = await pool.query('SELECT COUNT(*) FROM achievements');
+    const achievementCount = parseInt(achievementsResult.rows[0].count);
+    
+    if (projectCount > 0 && achievementCount > 0) {
       console.log("✅ Sample data already loaded");
       return;
     }
 
-    // Load projects from JSON file
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
-    const projectsFilePath = join(__dirname, 'data', 'projects.json');
-    const projectsData = JSON.parse(readFileSync(projectsFilePath, 'utf-8'));
-    
-    console.log("📂 Loading sample projects...");
-    
-    for (const project of projectsData.projects) {
-      await pool.query(
-        `INSERT INTO projects (id, title, description, image, github_url, demo_url, technologies, created_at, updated_at) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-        [
-          project.id,
-          project.title,
-          project.description,
-          project.image,
-          project.githubUrl || null,
-          project.demoUrl || null,
-          JSON.stringify(project.technologies),
-          project.createdAt,
-          project.updatedAt
-        ]
-      );
+
+    // Load projects from JSON file
+    if (projectCount === 0) {
+      const projectsFilePath = join(__dirname, 'data', 'projects.json');
+      const projectsData = JSON.parse(readFileSync(projectsFilePath, 'utf-8'));
+      
+      console.log("📂 Loading sample projects...");
+      
+      for (const project of projectsData.projects) {
+        await pool.query(
+          `INSERT INTO projects (id, title, description, image, github_url, demo_url, technologies, created_at, updated_at) 
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+          [
+            project.id,
+            project.title,
+            project.description,
+            project.image,
+            project.githubUrl || null,
+            project.demoUrl || null,
+            JSON.stringify(project.technologies),
+            project.createdAt,
+            project.updatedAt
+          ]
+        );
+      }
+      
+      console.log(`✅ Loaded ${projectsData.projects.length} sample projects`);
     }
-    
-    console.log(`✅ Loaded ${projectsData.projects.length} sample projects`);
+
+    // Load achievements from JSON file
+    if (achievementCount === 0) {
+      const achievementsFilePath = join(__dirname, 'data', 'achievements.json');
+      const achievementsData = JSON.parse(readFileSync(achievementsFilePath, 'utf-8'));
+      
+      console.log("🏆 Loading sample achievements...");
+      
+      for (const achievement of achievementsData.achievements) {
+        await pool.query(
+          `INSERT INTO achievements (id, title, description, image, date, category, certificate_url, organization, status, featured, created_at, updated_at) 
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+          [
+            achievement.id,
+            achievement.title,
+            achievement.description,
+            achievement.image,
+            achievement.date,
+            achievement.category,
+            achievement.certificateUrl,
+            achievement.organization,
+            achievement.status,
+            achievement.featured,
+            achievement.createdAt,
+            achievement.updatedAt
+          ]
+        );
+      }
+      
+      console.log(`✅ Loaded ${achievementsData.achievements.length} sample achievements`);
+    }
   } catch (error) {
     console.error("❌ Error loading sample data:", error);
     // Don't throw - let app continue even if sample data fails to load
