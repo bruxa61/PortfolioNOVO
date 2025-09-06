@@ -51,7 +51,7 @@ export default function Contact() {
               {/* Social Links */}
               <div className="flex space-x-4 pt-4">
                 <a
-                  href="https://linkedin.com/in/rafaela-botelho"
+                  href="https://www.linkedin.com/in/rafaela-botelho-76a4a72b0/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-blue-100 text-blue-600 rounded-xl hover:bg-blue-200 transition-colors duration-300"
