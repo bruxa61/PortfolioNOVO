@@ -1,0 +1,91 @@
+export const sampleProjects = [
+  {
+    id: "1",
+    title: "Sistema de Gerenciamento Acadêmico",
+    description: "Plataforma web desenvolvida para gerenciar informações acadêmicas, incluindo cadastro de alunos, disciplinas, notas e relatórios. Projeto desenvolvido durante o curso de ADS com foco em usabilidade e performance.",
+    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+    githubUrl: "https://github.com/bruxa61/sistema-academico",
+    demoUrl: null,
+    technologies: ["React", "TypeScript", "Node.js", "PostgreSQL"],
+    createdAt: "2024-01-15T10:00:00Z",
+    updatedAt: "2024-01-15T10:00:00Z"
+  },
+  {
+    id: "2",
+    title: "Jogo de Aventura em Pixel Art",
+    description: "Jogo 2D desenvolvido em JavaScript vanilla com HTML5 Canvas, featuring sistema de física, coletáveis, múltiplos níveis e trilha sonora original. Projeto que combina programação com arte digital.",
+    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+    githubUrl: "https://github.com/bruxa61/pixel-adventure-game",
+    demoUrl: "https://bruxa61.github.io/pixel-adventure-game/",
+    technologies: ["JavaScript", "HTML5 Canvas", "Pixel Art", "Game Development"],
+    createdAt: "2023-11-20T15:30:00Z",
+    updatedAt: "2023-11-20T15:30:00Z"
+  },
+  {
+    id: "3",
+    title: "API RESTful para E-commerce",
+    description: "API robusta desenvolvida em Node.js com Express para sistema de e-commerce, incluindo autenticação JWT, gerenciamento de produtos, carrinho de compras e integração com gateway de pagamento.",
+    image: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+    githubUrl: "https://github.com/bruxa61/ecommerce-api",
+    demoUrl: null,
+    technologies: ["Node.js", "Express", "MongoDB", "JWT", "Stripe API"],
+    createdAt: "2023-09-10T14:00:00Z",
+    updatedAt: "2023-09-10T14:00:00Z"
+  },
+  {
+    id: "4",
+    title: "Dashboard de Análise de Dados",
+    description: "Interface interativa para visualização de dados desenvolvida com React e Chart.js, permitindo análise em tempo real de métricas de vendas, comportamento de usuários e KPIs empresariais.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+    githubUrl: "https://github.com/bruxa61/analytics-dashboard",
+    demoUrl: "https://bruxa61.github.io/analytics-dashboard/",
+    technologies: ["React", "Chart.js", "Material-UI", "REST API"],
+    createdAt: "2024-03-05T09:15:00Z",
+    updatedAt: "2024-03-05T09:15:00Z"
+  }
+];
+
+export const sampleAchievements = [
+  {
+    id: "1",
+    title: "Cisco",
+    description: "Certificações pela Cisco",
+    image: null,
+    date: "2024-06-20",
+    category: "certificado",
+    certificateUrl: "#",
+    organization: "Cisco",
+    status: "active",
+    featured: false,
+    createdAt: "2024-06-20T00:00:00.000Z",
+    updatedAt: "2024-06-20T00:00:00.000Z"
+  },
+  {
+    id: "2",
+    title: "SENAI",
+    description: "Certificações pelo SENAI",
+    image: null,
+    date: "2025-08-24",
+    category: "certificado",
+    certificateUrl: "#",
+    organization: "SENAI",
+    status: "active",
+    featured: false,
+    createdAt: "2025-08-24T00:00:00.000Z",
+    updatedAt: "2025-08-24T00:00:00.000Z"
+  },
+  {
+    id: "3",
+    title: "AWS Academy Cloud Foundations",
+    description: "O certificado comprova meu entendimento geral detalhado de conceitos de nuvem, produtos essenciais da AWS, segurança, arquitetura, preços e suporte.",
+    image: null,
+    date: "2024-03-08",
+    category: "certificado",
+    certificateUrl: "#",
+    organization: "AWS Academy Graduate",
+    status: "active",
+    featured: true,
+    createdAt: "2024-03-08T00:00:00.000Z",
+    updatedAt: "2024-03-08T00:00:00.000Z"
+  }
+];

@@ -2,9 +2,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import pg from 'pg';
 import * as schema from '@shared/schema';
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { sampleProjects, sampleAchievements } from './data/sample-data.js';
 
 const { Pool } = pg;
 
@@ -198,17 +196,11 @@ async function loadSampleData(pool: pg.Pool) {
       return;
     }
 
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
-
-    // Load projects from JSON file
+    // Load projects from embedded data
     if (projectCount === 0) {
-      const projectsFilePath = join(__dirname, 'data', 'projects.json');
-      const projectsData = JSON.parse(readFileSync(projectsFilePath, 'utf-8'));
-      
       console.log("📂 Loading sample projects...");
       
-      for (const project of projectsData.projects) {
+      for (const project of sampleProjects) {
         await pool.query(
           `INSERT INTO projects (id, title, description, image, github_url, demo_url, technologies, created_at, updated_at) 
            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
@@ -226,17 +218,14 @@ async function loadSampleData(pool: pg.Pool) {
         );
       }
       
-      console.log(`✅ Loaded ${projectsData.projects.length} sample projects`);
+      console.log(`✅ Loaded ${sampleProjects.length} sample projects`);
     }
 
-    // Load achievements from JSON file
+    // Load achievements from embedded data
     if (achievementCount === 0) {
-      const achievementsFilePath = join(__dirname, 'data', 'achievements.json');
-      const achievementsData = JSON.parse(readFileSync(achievementsFilePath, 'utf-8'));
-      
       console.log("🏆 Loading sample achievements...");
       
-      for (const achievement of achievementsData.achievements) {
+      for (const achievement of sampleAchievements) {
         await pool.query(
           `INSERT INTO achievements (id, title, description, image, date, category, certificate_url, organization, status, featured, created_at, updated_at) 
            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
@@ -257,7 +246,7 @@ async function loadSampleData(pool: pg.Pool) {
         );
       }
       
-      console.log(`✅ Loaded ${achievementsData.achievements.length} sample achievements`);
+      console.log(`✅ Loaded ${sampleAchievements.length} sample achievements`);
     }
   } catch (error) {
     console.error("❌ Error loading sample data:", error);
