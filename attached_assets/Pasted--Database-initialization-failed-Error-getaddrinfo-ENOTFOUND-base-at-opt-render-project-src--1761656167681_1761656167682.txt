@@ -1,0 +1,43 @@
+❌ Database initialization failed: Error: getaddrinfo ENOTFOUND base
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async initializeDatabase (file:///opt/render/project/src/dist/index.js:1442:5)
+    at async file:///opt/render/project/src/dist/index.js:1713:3 {
+  errno: -3008,
+  code: 'ENOTFOUND',
+  syscall: 'getaddrinfo',
+  hostname: 'base'
+}
+12:57:48 PM [express] serving on port 10000
+     ==> Your service is live 🎉
+     ==> 
+     ==> ///////////////////////////////////////////////////////////
+     ==> 
+     ==> Available at your primary URL https://portfolionovo-3.onrender.com
+     ==> 
+     ==> ///////////////////////////////////////////////////////////
+12:58:07 PM [express] GET /api/auth/user 401 in 2ms :: {"message":"Não autenticado"}
+Database error in getAchievements: Error: getaddrinfo ENOTFOUND base
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+    at async DatabaseStorage.getAchievements (file:///opt/render/project/src/dist/index.js:479:22)
+    at async file:///opt/render/project/src/dist/index.js:1116:29 {
+  errno: -3008,
+  code: 'ENOTFOUND',
+  syscall: 'getaddrinfo',
+  hostname: 'base'
+}
+12:58:07 PM [express] GET /api/achievements 200 in 66ms :: []
+Database error in getProjects: Error: getaddrinfo ENOTFOUND base
+    at /opt/render/project/src/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///opt/render/project/src/node_modules/drizzle-orm/node-postgres/session.js:83:22
+    at async DatabaseStorage.getProjects (file:///opt/render/project/src/dist/index.js:411:29)
+    at async file:///opt/render/project/src/dist/index.js:973:25 {
+  errno: -3008,
+  code: 'ENOTFOUND',
+  syscall: 'getaddrinfo',
+  hostname: 'base'
+}
+12:58:07 PM [express] GET /api/projects 200 in 59ms :: []
